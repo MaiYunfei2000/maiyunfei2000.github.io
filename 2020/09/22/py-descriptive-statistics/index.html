@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Python 描述统计">
+<meta property="og:url" content="http://yoursite.com/2020/09/22/py-descriptive-statistics/index.html">
+<meta property="og:site_name" content="鱼的天空">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-09-22T11:33:29.275Z">
+<meta property="article:author" content="麦云飞">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="统计">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/09/22/py-descriptive-statistics/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python 描述统计 | 鱼的天空</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">鱼的天空</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/22/py-descriptive-statistics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/myf-logo.jpg">
+      <meta itemprop="name" content="麦云飞">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="鱼的天空">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 描述统计
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-22 00:00:00 / 修改时间：19:33:29" itemprop="dateCreated datePublished" datetime="2020-09-22T00:00:00+08:00">2020-09-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mannual/" itemprop="url" rel="index"><span itemprop="name">Mannual</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description"></div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>注：</p>
+<ol>
+<li>此系列文字面向已有统计基础的人，侧重 Python 实现而非统计知识的讲解。初学者请着重配合基础统计课程和教材食用。</li>
+<li>Python 版本默认为 3.6 。</li>
+<li>此页面的程序会用到 Python 第三方库 NumPy 、 Pandas 和 StatsModels 。如果你还没有安装，请在命令行里通过 <code>pip3 install numpy</code> （或<code>pandas</code>、<code>statsmodels</code>）这些命令来安装（Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
+</ol>
+</blockquote>
+<h2 id="1-知识回顾"><a href="#1-知识回顾" class="headerlink" title="1 知识回顾"></a>1 知识回顾</h2><h3 id="1-1-集中性"><a href="#1-1-集中性" class="headerlink" title="1.1 集中性"></a>1.1 集中性</h3><h4 id="平均数"><a href="#平均数" class="headerlink" title="平均数"></a>平均数</h4><p>用 ${x_1, x_2, …, x_i}$ 代表一个个数据， $N$ 为数据的个数，这些数据的<strong>平均数</strong> (mean) 为：</p>
+<p>$$\mu = \frac{x_1 + x_2 … + x_i}{N}$$</p>
+<p>简化为：</p>
+<p>$$\mu = \frac{\sum x_i}{N}$$</p>
+<p>上面是<strong>总体平均数</strong>的公式。对于<strong>样本平均数</strong>，公式如下：</p>
+<p>$$M = \frac{\sum x_i}{n}$$</p>
+<p>也就是平均数和样本量的符号改变了一下。</p>
+<blockquote>
+<p>注：研究报告中用$M$表示均值，而较多统计教科书用 $\bar{X}$ （读作“X bar”）。此系列文字默认使用前一种表示。</p>
+</blockquote>
+<h4 id="中数与百分等级分数"><a href="#中数与百分等级分数" class="headerlink" title="中数与百分等级分数"></a>中数与百分等级分数</h4><p><strong>中数</strong>（或中位数、第二四分位数、第50百分位数）是将频数分布恰好分为两部分的数据。分布中恰有50%个数据的分数高于或低于中数。其符号表示为：</p>
+<ul>
+<li>中数或中位数 (median) ：$Mdn$</li>
+<li>第二四分位数 (2nd quartile) ：$Q_2$</li>
+<li>第50百分位数 (50th percentile) ：$P_{50}$</li>
+</ul>
+<h4 id="众数"><a href="#众数" class="headerlink" title="众数"></a>众数</h4><p>一个频数分布中，<strong>众数</strong> (mode) 是频数最大的数据。</p>
+<blockquote>
+<p>注：如果你很无聊而且有点强迫症地关心它的符号表示，那么其中一种表示为 $M_o$ （下标为小写字母“O”），然而这个指标本来就用得不多，用到的时候也直接用“Mode”来表示就行了。</p>
+</blockquote>
+<h3 id="1-2-变异性"><a href="#1-2-变异性" class="headerlink" title="1.2 变异性"></a>1.2 变异性</h3><p><strong>变异</strong> (variance)  衡量一组数据的离散程度，数据越分散，它们的变异就越大。比如 ${1,3,5}$ 这组数据的变异性就大于 ${2,3,4}$ 这组数据。</p>
+<blockquote>
+<p>注：在英文世界中<strong>方差</strong>与变异是一回事。</p>
+</blockquote>
+<h4 id="总体方差"><a href="#总体方差" class="headerlink" title="总体方差"></a>总体方差</h4><p>$$\sigma^2 = \frac{\sum{x_i - M}}{N}$$</p>
+<h4 id="样本方差"><a href="#样本方差" class="headerlink" title="样本方差"></a>样本方差</h4><p>$$s^2 = \frac{\sum{x_i - M}}{n - 1}$$</p>
+<p>其中，可以用<strong>自由度</strong> ($df$) 来表示 $n-1$ ：</p>
+<p>$$s^2 = \frac{\sum{x_i - M}}{df}$$</p>
+<h4 id="标准差"><a href="#标准差" class="headerlink" title="标准差"></a>标准差</h4><p>方差的平方根： $\sigma$ 或 $s$ 。</p>
+<blockquote>
+<p>注：至于为什么对样本变异性的计算要使用 $n-1$ 而非 $n$ ，参见各课程、教材或知乎等地方的帖子的介绍。</p>
+</blockquote>
+<h5 id="Q-到底怎么判断是用总体还是样本的计算公式呢？"><a href="#Q-到底怎么判断是用总体还是样本的计算公式呢？" class="headerlink" title="Q: 到底怎么判断是用总体还是样本的计算公式呢？"></a>Q: 到底怎么判断是用总体还是样本的计算公式呢？</h5><p>看你要用那批数据做什么。比如你就只是要看一批数据的离散程度，那这批数据就是一个总体；如果你要拿它去估计（推断）更大一批数据的情况，那这批数据就是一个样本。</p>
+<p>像这篇<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/106706044">知乎帖子</a>里就讲得略详细，可以参考。总之，一句话，以实践需求为中心。</p>
+<h2 id="2-Python实现"><a href="#2-Python实现" class="headerlink" title="2 Python实现"></a>2 Python实现</h2><p><strong>例题：</strong></p>
+<p>对于数据 ${1, 5, 7, 3, 4, 4, 3, 2, 3} $，求它们的：</p>
+<ul>
+<li>平均数、中数、众数。</li>
+<li>方差、标准差（把数据当成样本数据）。</li>
+<li>方差、标准差（把数据当成总体数据）。</li>
+</ul>
+<p>以下提供了几种实现方式，具体使用哪种方式，应结合你的实践情境来判断哪种最为方便。</p>
+<h3 id="2-1-内置函数"><a href="#2-1-内置函数" class="headerlink" title="2.1 内置函数"></a>2.1 内置函数</h3><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/index.html">Python 标准库</a>中提供了一个用于计算基础统计量的模块，叫作“<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/statistics.html">statistics</a>”。</p>
+<blockquote>
+<p>PS：如官方所说：“此模块并不是诸如 NumPy，SciPy 等第三方库或者诸如 Minitab ，SAS，Matlab 等针对专业统计学家的专有全功能统计软件包的竟品。”</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入 statistics 模块</span></span><br><span class="line"><span class="keyword">import</span> statistics</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建数据列表</span></span><br><span class="line">data = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算平均数、中数、众数</span></span><br><span class="line">mean = statistics.mean(data)</span><br><span class="line">median = statistics.median(data)</span><br><span class="line">mode = statistics.mode(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算标准差和方差（假设数据为样本数据）</span></span><br><span class="line">stdev = statistics.stdev(data)</span><br><span class="line">variance = statistics.variance(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算标准差和方差（假设数据为总体数据）</span></span><br><span class="line">pstdev = statistics.pstdev(data)</span><br><span class="line">pvariance = statistics.pvariance(data)</span><br><span class="line"></span><br><span class="line">print(mean, median, mode)</span><br><span class="line">print(stdev, variance)</span><br><span class="line">print(pstdev, pvariance)</span><br></pre></td></tr></table></figure>
+<p><code>3.5555555555555554 3 3</code><br><code>1.740051084818425 3.0277777777777777</code><br><code>1.640535895581489 2.691358024691358</code>  </p>
+<p>不过由于大多数情况下你不会仅仅需要算这些东西，所以这个库会比较鸡肋……</p>
+<h3 id="2-2-NumPy"><a href="#2-2-NumPy" class="headerlink" title="2.2 NumPy"></a>2.2 NumPy</h3><p><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/">NumPy</a> 是一个提供了类似于 Matlab 的数组运算功能的第三方库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入 numpy 模块，简称为“np”</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据表征为 numpy 数组</span></span><br><span class="line">data = np.array([<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 平均数</span></span><br><span class="line">mean = np.mean(data))</span><br><span class="line"><span class="comment"># 中数</span></span><br><span class="line">median = print(np.median(data))</span><br><span class="line"><span class="comment"># 标准差（数据作为总体）</span></span><br><span class="line">std = print(np.std(data))</span><br><span class="line"><span class="comment"># 也可以这样子*</span></span><br><span class="line">mean, std = data.mean(), data.std())</span><br><span class="line"></span><br><span class="line">print(mean, median, std)</span><br></pre></td></tr></table></figure>
+
+<p><code>3.5555555555555554 3.0 1.640535895581489</code>  </p>
+<blockquote>
+<p>注（对应代码框里的星号）：</p>
+<p>* 如果你好奇为什么可以这样，可以去学习理解何为 Python 的<strong>类与对象</strong>，这是 Python 编程的精髓所在。</p>
+</blockquote>
+<p>对于上述函数的具体功能及详细用法，参见官方文档：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html">numpy.array</a></li>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html?highlight=mean#numpy.mean">numpy.mean</a></li>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.median.html?highlight=median#numpy.median">numpy.median</a></li>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.std.html?highlight=std#numpy.std">numpy.std</a></li>
+</ul>
+<h3 id="2-3-Pandas"><a href="#2-3-Pandas" class="headerlink" title="2.3 Pandas"></a>2.3 Pandas</h3><p><a href="pandas.pydata.org/docs">Pandas</a> 是易于使用的数据结构和数据分析的第三方库。你若是初入编程和计算领域，可以先将其粗暴地理解为 Python 上的表格工具。</p>
+<p>你可以在编程时直接创建这个数据对象。然而实践情境中你需要打交道的数据量远大于例题使用的数据量，往往需要从外部文件中导入。对于这些情况，后面均有代码示例。</p>
+<p>你需要准备好 csv 或 Excel 文件（xls 或 xlsx）。对于 csv ，你需要在任意编辑器中将以下文本保存为 .csv 文件（比如 data.csv）。</p>
+<pre><code>data
+1
+5
+7
+3
+4
+4
+3
+2
+3</code></pre>
+<p>如果是 Excel ，请这样保存：</p>
+<table>
+<thead>
+<tr>
+<th>data</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+</tr>
+<tr>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>先在 Python 中创建数据，看看它长啥样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接创建一个 pandas.DataFrame 对象</span></span><br><span class="line">data = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&#x27;data&#x27;</span>: [<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment"># 或从文件中读取数据来创建 pandas.DataFrame 对象</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">如果上述文件与 .py 文件，则只输入文件名即可</span></span><br><span class="line"><span class="string">否则需输入文件的路径</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">data = pd.read_csv(<span class="string">&#x27;data.csv&#x27;</span>) </span><br><span class="line">data = pd.read_excel(<span class="string">&#x27;data.xlsx&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 来看一下数据在 pandas.DataFrame 中长啥样</span></span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+
+<pre><code>   data
+0     1
+1     5
+2     7
+3     3
+4     4
+5     4
+6     3
+7     2
+8     3</code></pre>
+<p>然后来看下统计量吧：</p>
+<pre><code>&gt;&gt;&gt; data.describe()
+               data
+count  9.000000
+mean   3.555556
+std    1.740051
+min    1.000000
+25%    3.000000
+50%    3.000000
+75%    4.000000
+max    7.000000</code></pre>
+<p>如果你不仅仅是需要看一下结果，而是需要赋给变量，可以这样计算：</p>
+<pre><code>&gt;&gt;&gt; data[&#39;data&#39;].count()
+9
+&gt;&gt;&gt; data[&#39;data&#39;].mean()
+3.5555555555555554
+&gt;&gt;&gt; data[&#39;data&#39;].std()
+1.7400510848184252
+&gt;&gt;&gt; data[&#39;data&#39;].min()
+1
+&gt;&gt;&gt; data[&#39;data&#39;].quantile(0.25)
+3.0
+&gt;&gt;&gt; data[&#39;data&#39;].median()
+3.0
+&gt;&gt;&gt; data[&#39;data&#39;].quantile(0.75)
+4.0
+&gt;&gt;&gt; data[&#39;data&#39;].max()
+7</code></pre>
+<p>关于 Pandas 的详细入门介绍，参见<a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html"> Pandas 官方文档</a>。</p>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>这里的练习更多是初步上手一下使用 Python 进行数据分析的感觉，属于“Hello world”的级别。因此请前往后续章节吧。</p>
+<p><a target="_blank" rel="noopener" href="https://maiyunfei2000.github.io/2020/08/20/py-cog-psy-catalogue/">点此返回系列总目录</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/%E7%BB%9F%E8%AE%A1/" rel="tag"># 统计</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/20/py-cog-psy-catalogue/" rel="prev" title="Python 认知科学研究方法精要">
+      <i class="fa fa-chevron-left"></i> Python 认知科学研究方法精要
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.</span> <span class="nav-text">1 知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E9%9B%86%E4%B8%AD%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 集中性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B3%E5%9D%87%E6%95%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">平均数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%95%B0%E4%B8%8E%E7%99%BE%E5%88%86%E7%AD%89%E7%BA%A7%E5%88%86%E6%95%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">中数与百分等级分数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%97%E6%95%B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">众数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%8F%98%E5%BC%82%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 变异性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%96%B9%E5%B7%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC%E6%96%B9%E5%B7%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">样本方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%B7%AE"><span class="nav-number">1.2.3.</span> <span class="nav-text">标准差</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Q-%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E6%98%AF%E7%94%A8%E6%80%BB%E4%BD%93%E8%BF%98%E6%98%AF%E6%A0%B7%E6%9C%AC%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F%E5%91%A2%EF%BC%9F"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Q: 到底怎么判断是用总体还是样本的计算公式呢？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Python%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">2 Python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 内置函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-NumPy"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 NumPy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Pandas"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Pandas</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B0%8F%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">3 小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="麦云飞"
+      src="/images/myf-logo.jpg">
+  <p class="site-author-name" itemprop="name">麦云飞</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">麦云飞</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
