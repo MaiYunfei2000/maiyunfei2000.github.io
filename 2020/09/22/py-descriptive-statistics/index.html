@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="鱼的天空">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-09-22T11:33:29.275Z">
+<meta property="article:modified_time" content="2020-09-22T12:03:35.069Z">
 <meta property="article:author" content="麦云飞">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="编程">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-22 00:00:00 / 修改时间：19:33:29" itemprop="dateCreated datePublished" datetime="2020-09-22T00:00:00+08:00">2020-09-22</time>
+              <time title="创建时间：2020-09-22 00:00:00 / 修改时间：20:03:35" itemprop="dateCreated datePublished" datetime="2020-09-22T00:00:00+08:00">2020-09-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,15 +217,15 @@
 <li>此页面的程序会用到 Python 第三方库 NumPy 、 Pandas 和 StatsModels 。如果你还没有安装，请在命令行里通过 <code>pip3 install numpy</code> （或<code>pandas</code>、<code>statsmodels</code>）这些命令来安装（Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
 </ol>
 </blockquote>
-<h2 id="1-知识回顾"><a href="#1-知识回顾" class="headerlink" title="1 知识回顾"></a>1 知识回顾</h2><h3 id="1-1-集中性"><a href="#1-1-集中性" class="headerlink" title="1.1 集中性"></a>1.1 集中性</h3><h4 id="平均数"><a href="#平均数" class="headerlink" title="平均数"></a>平均数</h4><p>用 ${x_1, x_2, …, x_i}$ 代表一个个数据， $N$ 为数据的个数，这些数据的<strong>平均数</strong> (mean) 为：</p>
-<p>$$\mu = \frac{x_1 + x_2 … + x_i}{N}$$</p>
+<h2 id="1-知识回顾"><a href="#1-知识回顾" class="headerlink" title="1 知识回顾"></a>1 知识回顾</h2><h3 id="1-1-集中性"><a href="#1-1-集中性" class="headerlink" title="1.1 集中性"></a>1.1 集中性</h3><h4 id="平均数"><a href="#平均数" class="headerlink" title="平均数"></a>平均数</h4><p>用 $\lbrace x_1, x_2, \cdots , x_i \rbrace$ 代表一个个数据， $N$ 为数据的个数，这些数据的<strong>平均数</strong> (mean) 为：</p>
+<p>$$\mu = \frac{x_1 + x_2 + \cdots + x_i}{N}$$</p>
 <p>简化为：</p>
 <p>$$\mu = \frac{\sum x_i}{N}$$</p>
 <p>上面是<strong>总体平均数</strong>的公式。对于<strong>样本平均数</strong>，公式如下：</p>
 <p>$$M = \frac{\sum x_i}{n}$$</p>
 <p>也就是平均数和样本量的符号改变了一下。</p>
 <blockquote>
-<p>注：研究报告中用$M$表示均值，而较多统计教科书用 $\bar{X}$ （读作“X bar”）。此系列文字默认使用前一种表示。</p>
+<p>注：研究报告中用 $M$ 表示均值，而较多统计教科书用 $\bar{X}$ （读作“X bar”）。此系列文字默认使用前一种表示。</p>
 </blockquote>
 <h4 id="中数与百分等级分数"><a href="#中数与百分等级分数" class="headerlink" title="中数与百分等级分数"></a>中数与百分等级分数</h4><p><strong>中数</strong>（或中位数、第二四分位数、第50百分位数）是将频数分布恰好分为两部分的数据。分布中恰有50%个数据的分数高于或低于中数。其符号表示为：</p>
 <ul>
@@ -237,7 +237,7 @@
 <blockquote>
 <p>注：如果你很无聊而且有点强迫症地关心它的符号表示，那么其中一种表示为 $M_o$ （下标为小写字母“O”），然而这个指标本来就用得不多，用到的时候也直接用“Mode”来表示就行了。</p>
 </blockquote>
-<h3 id="1-2-变异性"><a href="#1-2-变异性" class="headerlink" title="1.2 变异性"></a>1.2 变异性</h3><p><strong>变异</strong> (variance)  衡量一组数据的离散程度，数据越分散，它们的变异就越大。比如 ${1,3,5}$ 这组数据的变异性就大于 ${2,3,4}$ 这组数据。</p>
+<h3 id="1-2-变异性"><a href="#1-2-变异性" class="headerlink" title="1.2 变异性"></a>1.2 变异性</h3><p><strong>变异</strong> (variance)  衡量一组数据的离散程度，数据越分散，它们的变异就越大。比如 $\lbrace1,3,5\rbrace$ 这组数据的变异性就大于 $\lbrace2,3,4\rbrace$ 这组数据。</p>
 <blockquote>
 <p>注：在英文世界中<strong>方差</strong>与变异是一回事。</p>
 </blockquote>
@@ -252,7 +252,7 @@
 <h5 id="Q-到底怎么判断是用总体还是样本的计算公式呢？"><a href="#Q-到底怎么判断是用总体还是样本的计算公式呢？" class="headerlink" title="Q: 到底怎么判断是用总体还是样本的计算公式呢？"></a>Q: 到底怎么判断是用总体还是样本的计算公式呢？</h5><p>看你要用那批数据做什么。比如你就只是要看一批数据的离散程度，那这批数据就是一个总体；如果你要拿它去估计（推断）更大一批数据的情况，那这批数据就是一个样本。</p>
 <p>像这篇<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/106706044">知乎帖子</a>里就讲得略详细，可以参考。总之，一句话，以实践需求为中心。</p>
 <h2 id="2-Python实现"><a href="#2-Python实现" class="headerlink" title="2 Python实现"></a>2 Python实现</h2><p><strong>例题：</strong></p>
-<p>对于数据 ${1, 5, 7, 3, 4, 4, 3, 2, 3} $，求它们的：</p>
+<p>对于数据 $\lbrace1, 5, 7, 3, 4, 4, 3, 2, 3\rbrace $，求它们的：</p>
 <ul>
 <li>平均数、中数、众数。</li>
 <li>方差、标准差（把数据当成样本数据）。</li>
@@ -371,7 +371,7 @@ max    7.000000</code></pre>
 &gt;&gt;&gt; data[&#39;data&#39;].max()
 7</code></pre>
 <p>关于 Pandas 的详细入门介绍，参见<a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html"> Pandas 官方文档</a>。</p>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>这里的练习更多是初步上手一下使用 Python 进行数据分析的感觉，属于“Hello world”的级别。因此请前往后续章节吧。</p>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>这里的练习更多是初步上手一下，简单体会用 Python 分析数据的感觉，属于“Hello world”的级别。因此请前往后续章节吧。</p>
 <p><a target="_blank" rel="noopener" href="https://maiyunfei2000.github.io/2020/08/20/py-cog-psy-catalogue/">点此返回系列总目录</a></p>
 
     </div>
