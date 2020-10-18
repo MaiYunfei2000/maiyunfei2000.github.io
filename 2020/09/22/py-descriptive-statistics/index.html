@@ -25,13 +25,15 @@
 <meta property="og:url" content="http://yoursite.com/2020/09/22/py-descriptive-statistics/index.html">
 <meta property="og:site_name" content="鱼的天空">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/09/23/HY4ChyrQbPTfDSo.png">
 <meta property="article:published_time" content="2020-09-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-09-22T12:11:59.211Z">
+<meta property="article:modified_time" content="2020-10-17T12:24:12.918Z">
 <meta property="article:author" content="麦云飞">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="编程">
 <meta property="article:tag" content="统计">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/09/23/HY4ChyrQbPTfDSo.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/09/22/py-descriptive-statistics/">
 
@@ -183,10 +185,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-09-22 00:00:00 / 修改时间：20:11:59" itemprop="dateCreated datePublished" datetime="2020-09-22T00:00:00+08:00">2020-09-22</time>
+              <time title="创建时间：2020-09-22 00:00:00" itemprop="dateCreated datePublished" datetime="2020-09-22T00:00:00+08:00">2020-09-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-17 20:24:12" itemprop="dateModified" datetime="2020-10-17T20:24:12+08:00">2020-10-17</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -214,7 +222,7 @@
 <ol>
 <li>此系列文字面向已有统计基础的人，侧重 Python 实现而非统计知识的讲解。初学者请着重配合基础统计课程和教材食用。</li>
 <li>Python 版本默认为 3.6 。</li>
-<li>此页面的程序会用到 Python 第三方库 NumPy 、 Pandas 和 StatsModels 。如果你还没有安装，请在命令行里通过 <code>pip3 install numpy</code> （或<code>pandas</code>、<code>statsmodels</code>）这些命令来安装（Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
+<li>此页面的程序会用到 Python 第三方库 NumPy 和 Pandas 。如果你还没有安装，请在命令行里通过 <code>pip3 install numpy</code> （或<code>pandas</code>）这些命令来安装（Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
 </ol>
 </blockquote>
 <h2 id="知识回顾"><a href="#知识回顾" class="headerlink" title="知识回顾"></a>知识回顾</h2><h3 id="集中性"><a href="#集中性" class="headerlink" title="集中性"></a>集中性</h3><h4 id="平均数"><a href="#平均数" class="headerlink" title="平均数"></a>平均数</h4><p>用 $\lbrace x_1, x_2, \cdots , x_i \rbrace$ 代表一个个数据， $N$ 为数据的个数，这些数据的<strong>平均数</strong> (mean) 为：</p>
@@ -258,7 +266,8 @@
 <li>方差、标准差（把数据当成样本数据）。</li>
 <li>方差、标准差（把数据当成总体数据）。</li>
 </ul>
-<p>以下提供了几种实现方式，具体使用哪种方式，应结合你的实践情境来判断哪种最为方便。</p>
+<p>并绘制出这组数据的频数分布直方图。</p>
+<p>以下提供了几种计算描述统计量的实现方式，具体使用哪种方式，应结合你的实践情境来判断哪种最为方便。</p>
 <h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/index.html">Python 标准库</a>中提供了一个用于计算基础统计量的模块，叫作“<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/statistics.html">statistics</a>”。</p>
 <blockquote>
 <p>PS：如官方所说：“此模块并不是诸如 NumPy，SciPy 等第三方库或者诸如 Minitab ，SAS，Matlab 等针对专业统计学家的专有全功能统计软件包的竟品。”</p>
@@ -371,7 +380,11 @@ max    7.000000</code></pre>
 &gt;&gt;&gt; data[&#39;data&#39;].max()
 7</code></pre>
 <p>关于 Pandas 的详细入门介绍，参见<a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html"> Pandas 官方文档</a>。</p>
+<h3 id="使用-Matplotlib-绘制频数分布直方图"><a href="#使用-Matplotlib-绘制频数分布直方图" class="headerlink" title="使用 Matplotlib 绘制频数分布直方图"></a>使用 Matplotlib 绘制频数分布直方图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">data = [<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># MacOS 下避免 Matplotlib 渲染图中的中文乱码</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Arial Unicode MS&#x27;</span>]</span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&#x27;直方图示例&#x27;</span>)</span><br><span class="line">plt.hist(data, range=(<span class="number">0</span>,<span class="number">10</span>), label=<span class="string">&#x27;示例&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">&#x27;分数&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;频数&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>所得图片如下：</p>
+<p><img src="https://i.loli.net/2020/09/23/HY4ChyrQbPTfDSo.png" alt="Figure_1.png"></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这里的练习更多是初步上手一下，简单体会用 Python 分析数据的感觉，属于“Hello world”的级别。因此请前往后续章节吧。</p>
+<h2 id="小小思考题"><a href="#小小思考题" class="headerlink" title="小小思考题"></a>小小思考题</h2><p>细心的你会发现：上述代码示例中，用 NumPy 库计算的标准差是总体标准差。那么如何使用 NumPy 计算样本标准差呢？（提示：还是使用 <code>numpy.std()</code> 方法。除了官方文档，下一页也有答案。）</p>
 <p><a target="_blank" rel="noopener" href="https://maiyunfei2000.github.io/2020/08/20/py-cog-psy-catalogue/">点此返回系列总目录</a></p>
 
     </div>
@@ -396,7 +409,10 @@ max    7.000000</code></pre>
     <a href="/2020/08/20/py-cog-psy-catalogue/" rel="prev" title="Python 认知科学研究方法精要">
       <i class="fa fa-chevron-left"></i> Python 认知科学研究方法精要
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/23/py-ttest-intro/" rel="next" title="推断统计简介与 t 检验的 Python 实现">
+      推断统计简介与 t 检验的 Python 实现 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -455,7 +471,7 @@ max    7.000000</code></pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.</span> <span class="nav-text">知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E4%B8%AD%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">集中性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B3%E5%9D%87%E6%95%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">平均数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%95%B0%E4%B8%8E%E7%99%BE%E5%88%86%E7%AD%89%E7%BA%A7%E5%88%86%E6%95%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">中数与百分等级分数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%97%E6%95%B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">众数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%BC%82%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">变异性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%96%B9%E5%B7%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC%E6%96%B9%E5%B7%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">样本方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%B7%AE"><span class="nav-number">1.2.3.</span> <span class="nav-text">标准差</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Q-%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E6%98%AF%E7%94%A8%E6%80%BB%E4%BD%93%E8%BF%98%E6%98%AF%E6%A0%B7%E6%9C%AC%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F%E5%91%A2%EF%BC%9F"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Q: 到底怎么判断是用总体还是样本的计算公式呢？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">Python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">内置函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy"><span class="nav-number">2.2.</span> <span class="nav-text">NumPy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pandas"><span class="nav-number">2.3.</span> <span class="nav-text">Pandas</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.</span> <span class="nav-text">知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E4%B8%AD%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">集中性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B3%E5%9D%87%E6%95%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">平均数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%95%B0%E4%B8%8E%E7%99%BE%E5%88%86%E7%AD%89%E7%BA%A7%E5%88%86%E6%95%B0"><span class="nav-number">1.1.2.</span> <span class="nav-text">中数与百分等级分数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%97%E6%95%B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">众数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E5%BC%82%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">变异性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%96%B9%E5%B7%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">总体方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC%E6%96%B9%E5%B7%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">样本方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%B7%AE"><span class="nav-number">1.2.3.</span> <span class="nav-text">标准差</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Q-%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E6%98%AF%E7%94%A8%E6%80%BB%E4%BD%93%E8%BF%98%E6%98%AF%E6%A0%B7%E6%9C%AC%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F%E5%91%A2%EF%BC%9F"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Q: 到底怎么判断是用总体还是样本的计算公式呢？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">Python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">内置函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NumPy"><span class="nav-number">2.2.</span> <span class="nav-text">NumPy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pandas"><span class="nav-number">2.3.</span> <span class="nav-text">Pandas</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Matplotlib-%E7%BB%98%E5%88%B6%E9%A2%91%E6%95%B0%E5%88%86%E5%B8%83%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="nav-number">2.4.</span> <span class="nav-text">使用 Matplotlib 绘制频数分布直方图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E5%B0%8F%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">小小思考题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -471,7 +487,7 @@ max    7.000000</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
