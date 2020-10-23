@@ -23,15 +23,19 @@
   <meta property="og:type" content="article">
 <meta property="og:title" content="Python 方差分析">
 <meta property="og:url" content="http://yoursite.com/2020/09/29/py-anova-intro/index.html">
-<meta property="og:site_name" content="鱼的天空">
+<meta property="og:site_name" content="青鱼的天空">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/CyqNjdUrMbkFleY.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/19/M57LarsGqT1XYwe.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/22/aqMehjCA7FRvcur.png">
 <meta property="article:published_time" content="2020-09-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-18T15:04:07.111Z">
+<meta property="article:modified_time" content="2020-10-23T11:21:53.356Z">
 <meta property="article:author" content="麦云飞">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="编程">
 <meta property="article:tag" content="统计">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/23/CyqNjdUrMbkFleY.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/09/29/py-anova-intro/">
 
@@ -46,7 +50,7 @@
   };
 </script>
 
-  <title>Python 方差分析 | 鱼的天空</title>
+  <title>Python 方差分析 | 青鱼的天空</title>
   
 
 
@@ -97,7 +101,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">鱼的天空</h1>
+      <h1 class="site-title">青鱼的天空</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -170,7 +174,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="鱼的天空">
+      <meta itemprop="name" content="青鱼的天空">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -191,7 +195,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-18 23:04:07" itemprop="dateModified" datetime="2020-10-18T23:04:07+08:00">2020-10-18</time>
+                <time title="修改时间：2020-10-23 19:21:53" itemprop="dateModified" datetime="2020-10-23T19:21:53+08:00">2020-10-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -200,6 +204,10 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Mannual/" itemprop="url" rel="index"><span itemprop="name">Mannual</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning-Notes/" itemprop="url" rel="index"><span itemprop="name">Learning Notes</span></a>
                 </span>
             </span>
 
@@ -220,21 +228,625 @@
 <ol>
 <li>此系列文字面向已有统计基础的人（修完心理统计或类似课程的大一结业学生），侧重 Python 实现而非统计知识的讲解。小白请着重配合基础统计课程和教材食用。</li>
 <li>Python 版本默认为 3.6 。</li>
-<li>此页面的程序会用到 Python 第三方库 <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable">NumPy</a> 、<a target="_blank" rel="noopener" href="https://docs.scipy.org/doc/scipy/reference/">SciPy</a> 和 <a target="_blank" rel="noopener" href="https://www.statsmodels.org/stable/index.html">StatsModels</a> 。如果你还没有安装，请在命令行里通过 <code>pip3 install numpy</code> （或<code>scipy</code>/<code>statsmodels</code>）这些命令来安装（Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
+<li>此页面的程序会用到 Python 第三方库 <a target="_blank" rel="noopener" href="https://numpy.org/doc/stable">NumPy</a> 、<a target="_blank" rel="noopener" href="https://docs.scipy.org/doc/scipy/reference/">SciPy</a> 、<a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/">Pandas</a> 、 <a target="_blank" rel="noopener" href="https://www.statsmodels.org/stable/index.html">StatsModels</a> 、 <a target="_blank" rel="noopener" href="https://pingouin-stats.org/">Pingouin</a> 、<a target="_blank" rel="noopener" href="https://matplotlib.org/">Matplotlib</a> 和 <a target="_blank" rel="noopener" href="https://seaborn.pydata.org/">Seaborn</a>。如果你还没有安装，请在命令行里通过输入指令 <code>pip3 install numpy</code> （或<code>scipy</code>、<code>pandas</code>、<code>statsmodels</code>、<code>pingouin</code>、<code>matplotlib</code>以及<code>seaborn</code>）这些命令来安装（Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
 <li>此系列文字为学习笔记，仅供学习交流使用。</li>
 </ol>
 </blockquote>
-<h2 id="知识回顾"><a href="#知识回顾" class="headerlink" title="知识回顾"></a>知识回顾</h2><h2 id="Python-实现"><a href="#Python-实现" class="headerlink" title="Python 实现"></a>Python 实现</h2><h3 id="例1-单因素方差分析"><a href="#例1-单因素方差分析" class="headerlink" title="例1 单因素方差分析"></a>例1 单因素方差分析</h3><p><a target="_blank" rel="noopener" href="https://mlln.cn/2015/08/19/Python%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%EF%BC%9A[3]%E5%8D%95%E5%9B%A0%E7%B4%A0%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90/">https://mlln.cn/2015/08/19/Python%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%EF%BC%9A[3]%E5%8D%95%E5%9B%A0%E7%B4%A0%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90/</a></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li>知识回顾<ul>
+<li>方差分析</li>
+<li>独立测量方差分析</li>
+<li>重复测量方差分析</li>
+<li>双因素方差分析</li>
+</ul>
+</li>
+<li>Python 实现<ul>
+<li>例题1 单因素独立测量方差分析</li>
+<li>例题2 单因素重复测量方差分析</li>
+<li>例题3 双因素独立测量方差分析</li>
+</ul>
+</li>
+<li>延伸阅读</li>
+</ul>
+<h2 id="知识回顾"><a href="#知识回顾" class="headerlink" title="知识回顾"></a>知识回顾</h2><h3 id="方差分析"><a href="#方差分析" class="headerlink" title="方差分析"></a>方差分析</h3><p>以下先回顾一点必要的术语：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.f_oneway.html#scipy.stats.f_oneway">scipy.stats.f_oneway — SciPy v1.5.2 Reference Guide</a></li>
+<li>在方差分析（ANOVA）中，用于分派组别的变量（自变量或准自变量）被称为<strong>因素</strong>或<strong>因子</strong>。</li>
+<li>因素的个别情形或数值，被称为<strong>因素的水平</strong>。</li>
 </ul>
-<h3 id="例2-重复测量方差分析"><a href="#例2-重复测量方差分析" class="headerlink" title="例2 重复测量方差分析"></a>例2 重复测量方差分析</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.statsmodels.org/stable/anova.html?highlight=anova#module-statsmodels.stats.anova">ANOVA — statsmodels</a></li>
-</ul>
-<h3 id="例3-双因素独立测量方差分析"><a href="#例3-双因素独立测量方差分析" class="headerlink" title="例3 双因素独立测量方差分析"></a>例3 双因素独立测量方差分析</h3><h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><p>本页面的统计知识及例题基本来自：</p>
+<p>比如下表所示的就是一个两因素的研究设计，更具体来说，是 2（治疗技术：治疗技术1，治疗技术2）× 3（时间：治疗前，治疗后，治疗6个月后）的混合设计，其中治疗技术因素为独立测量，时间因素为重复测量。</p>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>治疗前</th>
+<th>治疗后</th>
+<th>治疗6个月后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>治疗技术1<br>（第一组）</td>
+<td>（一些数据）</td>
+<td>（一些数据）</td>
+<td>（一些数据）</td>
+</tr>
+<tr>
+<td>治疗技术2<br>（第二组）</td>
+<td>（一些数据）</td>
+<td>（一些数据）</td>
+<td>（一些数据）</td>
+</tr>
+</tbody></table>
+<p>我们经常需要比较两个以上的样本均值的差异，此时需要用变异来定义和测量它们——这就是方差分析的统计检验的思路。随后，我们要确定总的变异（variance）当中哪些变异分别是由哪些因素引起的。</p>
+<p>方差分析的检验统计量叫作 <strong>$F$分数</strong>或 <strong>$F$比值</strong>，它是由以下结构定义的：</p>
+<p>$$F = \frac{处理间方差}{处理内方差} = \frac{处理间的真实差异}{不存在处理效应时的差异}$$</p>
+<p>或者是：</p>
+<p>$$F = \frac{处理效应 + 随机因素（非系统因素）造成的差异}{随机因素（非系统因素）造成的差异}$$</p>
+<p>$F$ 比值的分母测量的仅是随机、非系统的变异，被称为<strong>误差项</strong>；$F$ 比值的分子也包含了这个非系统性变异，但是它也包含了处理效应产生的系统性变异。方差分析的目的就是找出处理效应是否存在。而当处理效应为 0 时（$H_0$ 为真），误差项（分母）和分子都来源于同样的变异，故 $F$ 比值很可能很接近 1 。</p>
+<p>$F$ 比值的数学公式如下：</p>
+<p>$$F = \frac{s^2_{处理间}}{s^2_{处理内}} = \frac{MS^2_{处理间}}{MS^2_{处理内}}$$</p>
+<p>“$MS$”被称作“均方”，是离差平方（$(X - \bar{X})^2$）的平均数。在方差分析的说法中常用均方 $MS$ 来代替方差 $s^2$ 。</p>
+<p>无论是处理间还是处理内的均方，它们的计算方式都是 $\frac{SS}{df}$，因此我们需要确定相应的 $SS$ 和 $df$ 是什么。以下回顾不同设计情形下的分析方式。</p>
+<h3 id="独立测量方差分析"><a href="#独立测量方差分析" class="headerlink" title="独立测量方差分析"></a>独立测量方差分析</h3><p>我们可以使用定义式或计算式来计算 $SS$ ：</p>
+<p>$$SS_{总} = \sum{(X - \bar{X})^2} = \sum{X^2} - \frac{(\sum{X})^2}{N}$$</p>
+<p>总变异可以分离为处理间变异和处理内变异（以下式子中我故意把下标换成了英文，以后你若在其它的英文教材中看到这些就知道是怎么回事了），因此又有：</p>
+<p>$$SS_{total} = SS_{between} + SS_{within}$$</p>
+<p>其中：</p>
+<p>$$SS_{处理间} = \sum{\frac{T^2}{n} - \frac{(\sum{X})^2}{N}}$$<br>$$SS_{处理内} = \sum{SS_{每一处理内}}$$</p>
+<p>其中 $T$ 是一个处理内的得分之和， $n$ 是一个处理内的分数个数（$\sum n = N$）。需要注意的是，不同教材在这里的符号表述会有不同，因此更关键的是理解这些式子的符号具体代表着什么，具体意味着什么。此小节后面有一个例子表格，你看了表格就会感到更加清楚了。</p>
+<p>由于处理间变异与处理内变异之和为总变异，我们还可以用总变异减去处理内变异来得到处理间变异：</p>
+<p>$$SS_{处理间} = SS_{总} - SS_{处理内}$$</p>
+<p><strong>例子表格：不同电话情境对驾驶表现分数的影响</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">处理1<br>没有电话（样本1）</th>
+<th align="center">处理2<br>手持电话（样本2）</th>
+<th align="center">处理3<br>免提电话（样本3）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">$T_1$=20<br>$SS_{within_1}$=6<br>$n_1$=5<br>$M_1$=4</td>
+<td align="center">$T_2$=5<br>$SS_{within_2}$=6<br>$n_2$=5<br>$M_2$=1</td>
+<td align="center">$T_3$=5<br>$SS_{within_3}$=4<br>$n_3$=5<br>$M_3$=1</td>
+</tr>
+</tbody></table>
+<p>分析完变异（离差平方和）之后，我们再来分析一下相应自由度的计算：</p>
+<p>$$df_{总} = N - 1 = 14 = df_{处理内} + df_{处理间}$$<br>$$df_{处理内} = \sum{df_{每一处理内}} = \sum{(n - 1)} = N - k = 12$$<br>$$df_{处理间} = k - 1 = 2$$</p>
+<p>其中 $k$ 为处理条件的个数。</p>
+<p>求出相应的的离差平方和及自由度之后，就可以求相应的均方（方差），进而是求 $F$ 分数，并获取相应的 $p$ 值用于得出检验结论了。</p>
+<p>然后我们还需要计算效应量。</p>
+<p>在方差分析中，用 $\eta^2$（这个字符的英文单词为“eta”）来代替 $r^2$，它意味着被处理条件所解释的方差的比例。数学公式为：</p>
+<p>$$\eta^2 = \frac{SS_{处理间}}{SS_总}$$</p>
+<p>完了吗？没有呢。</p>
+<p>方差分析让我们可以在一次检验中同时比较所有的均值差异，来确定某个因素是否有带来显著影响——然而这也让解释结果出现了一定的麻烦：具体来说，在我们得到 $F$ 分数显著时，只能说明在全部的均值差异中至少存在一个样本的均值差异是显著的，换句话说，并没有告诉我们具体哪些均值是显著不同的。为了回答这个问题，我们要进行<strong>事后检验</strong>。显然，只有在方差分析<em>拒绝了 $H_0$ 且处理存在三个或更多水平</em>时，才需要用到这个检验。常用的检验方法有 Tukey 的可靠显著差异法（或称为 HSD 检验法）和 Scheffé 检验法，具体内容参见各统计学材料，此处略去——我们只需要会用编程来实现这个功能并解读程序吐出的结果就好了。</p>
+<p>最后不要忘了，独立测量方差分析与独立测量 $t$ 检验一样，需要样本分数相互独立、总体服从正态分布，以及要符合方差齐性！</p>
+<h3 id="重复测量方差分析"><a href="#重复测量方差分析" class="headerlink" title="重复测量方差分析"></a>重复测量方差分析</h3><p>在重复测量方差分析中，我们将总变异分离为处理间变异和处理内变异后，还需要进一步将处理内变异分离为被试间变异以及其它误差的变异。第一步与前面独立测量方差分析的相同，因此这里只回顾第二步的内容。以以下数据表格为例（例子的具体介绍请参见“Python实现”部分的例题2），被试间变异的 $SS$ 的计算公式为：</p>
+<p>$$SS_{被试间} = \sum{\frac{P^2}{k}} - \frac{(\sum{X})^2}{N}$$</p>
+<p>这里 $P$ 代表每个被试的得分总分，其它符号与前面介绍的相同。</p>
+<p>随后我们将个体差异（被试间变异）从处理内变异中分离出来，即得到误差的测量：</p>
+<p>$$SS_{误差} = SS_{处理内} - SS_{被试间}$$</p>
+<p><strong>例子表格：同一被试在不同学习策略下的测验得分</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">被试</th>
+<th align="center">仅阅读一次</th>
+<th align="center">重复阅读</th>
+<th align="center">回答事先准备好的问题</th>
+<th align="center">学生提出问题并解答自己的问题</th>
+<th align="center">总分数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">A</td>
+<td align="center">3</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">$P$=24</td>
+</tr>
+<tr>
+<td align="center">B</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+<td align="center">9</td>
+<td align="center">$P$=20</td>
+</tr>
+<tr>
+<td align="center">C</td>
+<td align="center">4</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">7</td>
+<td align="center">$P$=24</td>
+</tr>
+<tr>
+<td align="center">D</td>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">9</td>
+<td align="center">10</td>
+<td align="center">$P$=32</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td align="center">6</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">10</td>
+<td align="center">$P$=32</td>
+</tr>
+<tr>
+<td align="center">F</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">10</td>
+<td align="center">10</td>
+<td align="center">$P$=36</td>
+</tr>
+</tbody></table>
+<p>然后是自由度的计算：</p>
+<p>$$df_{被试间} = n - 1 = 5$$<br>$$df_{误差} = df_{处理内} - df_{被试间} = 15$$</p>
+<p>然后就可以计算相应 $MS$ ，进而计算 $F$ 比值了：</p>
+<p>$$F = \frac{MS_{处理间}}{MS_{误差}}$$</p>
+<p>在这种方差分析中， $F$ 比值的分母被称为<strong>误差变异</strong>或<strong>残余误差</strong>（简称为<strong>残差</strong>）。它测量的是没有系统处理效应及个体差异时，分数变异的期望值。</p>
+<p>随后计算效应量，这里与独立测量方差分析相比也有不同，并有两种表现方式：</p>
+<p>$$\eta^2 = \frac{SS_{处理间}}{SS_总 - SS_{SS_被试间}} = \frac{SS_{处理间}}{SS_{处理间} + SS_{误差}}$$</p>
+<p>这里计算的比例不是基于分数的总变异（因为 $SS_{被试间}$ 被去除了），因此这个结果常被记为 $\eta^2_p$ 即“偏 $\eta^2$” （“偏”的英文为“partial”）。</p>
+<p>最后，重复测量方差分析也要进行事后检验，以及要符合三大使用前提条件，这些都与前面独立测量方差分析那里提到的一样。</p>
+<h3 id="双因素方差分析"><a href="#双因素方差分析" class="headerlink" title="双因素方差分析"></a>双因素方差分析</h3><p>实际生活情境中，变量很难孤立存在，而是与其它变量共同影响某个事物，并且变量之间也会相互影响。考察这样的变量关系时就需要涉及到更多因素的实验设计。</p>
+<p>以下回顾一些基本概念：</p>
 <ul>
-<li>弗雷德里克·J·格雷维特, &amp; 拉里·B·瓦尔诺. (2016). 行为科学统计精要. 中国人民大学出版社. (此书未来可能有新版引入)</li>
+<li>一个因素各个水平之间的平均数差异，称为该因素的<strong>主效应</strong>。当研究设计被呈现为一个矩阵，且第一个因素定义行，第二个因素定义列的时候，行之间的平均数差异描述的就是第一个因素的主效应，列之间的平均数差异描述的是第二个因素的主效应。如下表所示，高自尊被试的平均分为 $M$ = 8，低自尊被试的平均分为 $M$ = 4，这两个总平均分的差异体现了<em>自尊的主效应</em>。</li>
 </ul>
+<p>**例子表格：不同自尊水平和观众条件下的演讲者表现</p>
+<table>
+<thead>
+<tr>
+<th align="center">\</th>
+<th align="center">没有观众</th>
+<th align="center">有观众</th>
+<th align="center">相应条件下<br>的总平均分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>低自尊</strong></td>
+<td align="center">$M$ = 7</td>
+<td align="center">$M$ = 9</td>
+<td align="center">$M$ = 8</td>
+</tr>
+<tr>
+<td align="center"><strong>高自尊</strong></td>
+<td align="center">$M$ = 3</td>
+<td align="center">$M$ = 5</td>
+<td align="center">$M$ = 4</td>
+</tr>
+<tr>
+<td align="center"><strong>相应条件下<br>的总平均分</strong></td>
+<td align="center">$M$ = 5</td>
+<td align="center">$M$ = 7</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>此外，当被试处理情境之间的平均数差异不同于因素的全部主效应时，这两个因素之间的<strong>交互作用</strong>就产生了。也可以说，当其中一个因素的效应依赖于第二个因素的不同水平时，就说因素之间存在着交互作用。此时若将平均数体现在折线图上，就存在着非平行线（比如例题3结尾报告的图片）。</li>
+</ul>
+<p>对于上面这个例子表格，我们可以看到，观众因素存在着主效应（无论是看第一行还是第二行还是第三行的 $M$ 值，都会发现它们的差值为 2 ），自尊因素也存在着主效应（观察一个个竖列，与前面同理，有着 4 的均值差异），然而两个因素不存在着交互效应（比如说，将自尊因素的水平给固定下来，一行行地看数据，高自尊与低自尊的均值差异都是 2 ，而不会有诸如一个是 1 、一个是 3 之类的；也可以将观众因素的水平给固定下来，会得到同样的发现）。</p>
+<p>接下来考察 $F$ 比值的计算。</p>
+<p>对于双因素方差分析，除了要将总变异分离为处理间变异与处理内变异，还要进一步将处理间变异分离为因素A的变异、因素B的变异，以及交互作用的变异。</p>
+<p>第一步的公式与前面介绍过的是一样的：</p>
+<p>$$SS_{总} = \sum{(X - \bar{X})^2} = \sum{X^2} - \frac{(\sum{X})^2}{N}$$<br>$$SS_{处理间} = \sum{\frac{T^2}{n} - \frac{(\sum{X})^2}{N}} = SS_{总} - SS_{处理内}$$<br>$$SS_{处理内} = \sum{SS_{每一处理内}}$$<br><br><br>$$df_{总} = N - 1 = df_{处理内} + df_{处理间}$$<br>$$df_{处理内} = \sum{df_{每一处理内}} = \sum{(n - 1)} = N - k$$<br>$$df_{处理间} = k - 1$$</p>
+<p>随后进入分析的第二步。结合下面这个例子表格会好理解一点（关于它的具体介绍请参见后面“Python实现”部分的例题3）：</p>
+<p><strong>例子表格：不同时间控制与呈现模式下的测验成绩</strong></p>
+<p><img src="https://i.loli.net/2020/10/23/CyqNjdUrMbkFleY.png" alt="Screen Shot 2020-10-23 at 16.40.29.png"></p>
+<p>以下依次分析因素 A 、因素 B 和交互作用的变异。</p>
+<p>① 因素A：</p>
+<p>$$SS_A = \sum{\frac{T_{行}^2}{n_{行}}} - \frac{(\sum{X})^2}{N} = \frac{70^2}{10} + \frac{85^2}{10} + \frac{155}{20} = 11.25$$<br>$$df_A = 行数 - 1 = 1$$</p>
+<p>② 因素B：</p>
+<p>$$SS_B = \sum{\frac{T_{列}^2}{n_{列}}} - \frac{(\sum{X})^2}{N} = \frac{85^2}{10} + \frac{70^2}{10} + \frac{155}{20} = 11.25$$<br>$$df_B = 列数 - 1 = 1$$</p>
+<p>③ 交互作用：</p>
+<p>$$SS_{A×B} = SS_总 - SS_A - SS_B$$<br>$$df_{A×B} = df_总 - df_A - df_B$$</p>
+<p>最后计算相应的三个 $F$ 比值：</p>
+<p>$$MS_{处理内} = \frac{SS_{处理内}}{df_{处理内}}$$<br>$$MS_{A} = \frac{SS_{A}}{df_{A}}$$<br>$$MS_{B} = \frac{SS_{B}}{df_{B}}$$<br>$$MS_{A×B} = \frac{SS_{A×B}}{df_{A×B}}$$<br><br><br>$$F_A = \frac{MS_A}{MS_{处理内}}$$<br>$$F_B = \frac{MS_B}{MS_{处理内}}$$<br>$$F_{A×B} = \frac{MS_{A×B}}{MS_{处理内}}$$</p>
+<p>最后是效应量 $\eta_p^2$ 的计算，有两种表示：</p>
+<p>$$\eta_{p_A}^2 = \frac{SS_A}{SS_总 - SS_B - SS_{A×B}} = \frac{SS_A}{SS_A + SS_{处理内}}$$<br>$$\eta_{p_B}^2 = \frac{SS_B}{SS_总 - SS_A - SS_{A×B}} = \frac{SS_B}{SS_B + SS_{处理内}}$$<br>$$\eta_{p_{A×B}}^2 = \frac{SS_A×B}{SS_总 - SS_A - SS_{B}} = \frac{SS_{A×B}}{SS_{A×B} + SS_{处理内}}$$</p>
+<p>以上仅仅是对于双因素独立测量方差分析的谈论。如果涉及到重复测量，我们还要按因素将处理内的变异分离为被试间变异和误差变异再进行计算，这里与上一小节的介绍相同，就不再赘述。</p>
+<p>双因素方差分析的三大假设及事后检验与前面的仍然一样，毕竟它的研究设计无非就是两个独立测量设计组合在一起，或是两个重复测量设计组合在一起，或是一个独立一个重复测量设计组合在一起（也就是混合设计）。</p>
+<h2 id="Python-实现"><a href="#Python-实现" class="headerlink" title="Python 实现"></a>Python 实现</h2><h3 id="例题1-单因素独立测量方差分析"><a href="#例题1-单因素独立测量方差分析" class="headerlink" title="例题1 单因素独立测量方差分析"></a>例题1 单因素独立测量方差分析</h3><p>进行测验之前最好的学习策略是什么？一个研究比较了三个不同的学习策略（Weinstein，McDermott，. Roediger，2010）。在研究中，学生阅读一篇他们将要进行测验的文章。在第一种条件下，被试仅重复阅读文章；第二种条件下， 学生回答事先准备好的问题；第三种条件下，学生提出问题并解答自己的问题。结果发现， 回答问题显著提高了测验成绩，但是跟学生是否自己提出问题无关。<br>下表的数据与研究中得到的数据相似，但添加了一种处理条件：只阅读一次。</p>
+<table>
+<thead>
+<tr>
+<th align="center">仅阅读一次</th>
+<th align="center">重复阅读</th>
+<th align="center">回答事先准备好的问题</th>
+<th align="center">学生提出问题并解答自己的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">3</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">9</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">10</td>
+<td align="center">10</td>
+</tr>
+</tbody></table>
+<p>问题：不同学习策略下的测试成绩是否不同？</p>
+<p><strong>提出假设</strong></p>
+<p>$H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4$ （不同学习策略下的测试成绩相同。）<br><br>$H_1:$ 至少有一个学习策略与其它学习策略的测试成绩不同。</p>
+<p><strong>进行检验</strong></p>
+<p>方法①：使用 scipy</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> stats</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载数据（每行数据为同一个条件下的分数）：创建一个 NumPy 数组</span></span><br><span class="line">data = np.array([[<span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">8</span>],</span><br><span class="line">                 [<span class="number">5</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">8</span>],</span><br><span class="line">                 [<span class="number">8</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">10</span>],</span><br><span class="line">                 [<span class="number">8</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>]])</span><br><span class="line"><span class="comment"># 进行方差齐性检验</span></span><br><span class="line">_, p = stats.levene(data[<span class="number">0</span>,:], data[<span class="number">1</span>,:], data[<span class="number">2</span>,:], data[<span class="number">3</span>,:])</span><br><span class="line"><span class="comment"># 令方差齐性检验的 p &gt; 0.05 ，否则报错</span></span><br><span class="line"><span class="keyword">assert</span> p &gt; <span class="number">0.05</span>, <span class="string">f&quot;数据不符合方差齐性 (p = <span class="subst">&#123;p:<span class="number">.3</span>f&#125;</span>)&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单因素方差分析</span></span><br><span class="line">f, p = stats.f_oneway(data[<span class="number">0</span>,:], data[<span class="number">1</span>,:], data[<span class="number">2</span>,:], data[<span class="number">3</span>,:])</span><br><span class="line"></span><br><span class="line">print(<span class="string">f&quot;F = <span class="subst">&#123;f:<span class="number">.2</span>f&#125;</span>\np = <span class="subst">&#123;p:<span class="number">.3</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>F = 6.45
+p = 0.003</code></pre>
+<p>因此拒绝虚无假设。</p>
+<ul>
+<li>官方文档索引：<a target="_blank" rel="noopener" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.f_oneway.html">scipy.stats.f_oneway</a></li>
+</ul>
+<p>方法②：使用 statsmodels</p>
+<p>先看一下我们的数据应该长啥样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> statsmodels.formula.api <span class="keyword">import</span> ols</span><br><span class="line"><span class="keyword">from</span> statsmodels.stats.anova <span class="keyword">import</span> anova_lm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 pandas.DataFrame</span></span><br><span class="line"><span class="comment"># 你会发现它的括号里面的格式与 Python 内置类型中的“字典” (dict) 没有区别</span></span><br><span class="line">data = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&quot;Strategy&quot;</span>: sorted([<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>] * <span class="number">6</span>),</span><br><span class="line">    <span class="string">&quot;Grade&quot;</span>: [<span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+
+<pre><code>   Strategy  Grade
+0         a      3
+1         a      3
+2         a      4
+3         a      6
+4         a      6
+5         a      8
+6         b      5
+7         b      3
+8         b      5
+9         b      7
+10        b      8
+11        b      8
+12        c      8
+13        c      5
+14        c      8
+15        c      9
+16        c      8
+17        c     10
+18        d      8
+19        d      9
+20        d      7
+21        d     10
+22        d     10
+23        d     10</code></pre>
+<p><code>&#39;Strategy&#39;</code> 这列数据应当使用字符串而非是数值，不然会算出错误结果。</p>
+<p>方差齐性检验与前面的相同，此处略过。然后一行代码搞定方差分析：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方差分析</span></span><br><span class="line"><span class="comment"># 这里比较陌生的就是 ols() 里面的字符串（叫作“formula”）的含义：</span></span><br><span class="line"><span class="comment"># 以 data 里的 Grade 作为因变量，以 Strategy 为自变量</span></span><br><span class="line">result = anova_lm(ols(<span class="string">&#x27;Grade ~ Strategy&#x27;</span>, data=data).fit())</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure>
+
+<pre><code>            df  sum_sq  mean_sq         F    PR(&gt;F)
+Strategy   3.0    60.0     20.0  6.451613  0.003116
+Residual  20.0    62.0      3.1       NaN       NaN</code></pre>
+<p>接下来计算效应量 $\eta^2$ 。如果你前面用的是 SciPy ，那就比较麻烦了……</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算总离均差平方和</span></span><br><span class="line">mean_total = np.mean(data)</span><br><span class="line">ss_total = np.sum((data - mean_total)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算处理内离均差平方和</span></span><br><span class="line"><span class="comment"># data.shape[0] 代表 data 的行数</span></span><br><span class="line">each_ss_within = []</span><br><span class="line"><span class="comment"># 也就是说这个 for 循环是一行行地读取 data 矩阵然后进行运算的</span></span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> range(data.shape[<span class="number">0</span>]):</span><br><span class="line">    each_ss_within.append(np.sum((data[d,:] - np.mean(data[d,:]))**<span class="number">2</span>))</span><br><span class="line"><span class="comment"># 把每个处理条件内的离均差平方和加起来得到总的处理内离均差平方和</span></span><br><span class="line">ss_within = np.sum(each_ss_within)</span><br><span class="line"><span class="comment"># 下面这一行与上面几行代码的效果相同，选哪种则看个人或团队偏好</span></span><br><span class="line">ss_within = sum([np.sum((data[d,:] - data[d,:].mean())**<span class="number">2</span>) <span class="keyword">for</span> d <span class="keyword">in</span> range(data.shape[<span class="number">0</span>])])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算处理间离均差平方和</span></span><br><span class="line">ss_between = ss_total - ss_within</span><br></pre></td></tr></table></figure>
+
+<p>而如果用着 statsmodels ，可以从前面得到的变量 <code>result</code> （其数据类型为 <code>pandas.DataFrame</code>）那里直接获取 $SS$ ：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先选取 result 的 &#x27;sum_sq&#x27; 这一列（就像用键来读取字典的值一样）</span></span><br><span class="line"><span class="comment"># 然后再以 &#x27;Strategy&#x27; 作为 index 来访问这一列的相应数据</span></span><br><span class="line">ss_between = result[<span class="string">&#x27;sum_sq&#x27;</span>].Strategy</span><br><span class="line"><span class="comment"># 将数据类型转换为内置类型 float（原本为 numpy.float64），再四舍五入一下</span></span><br><span class="line">ss_between = round(float(ss_between), <span class="number">1</span>)</span><br><span class="line"><span class="comment"># 再读取一下 Residual 得到组内离均差平方和</span></span><br><span class="line"><span class="comment"># 前面分两行是为了减轻读代码的负荷，这里就直接一步到位了</span></span><br><span class="line">ss_within = round(float(result[<span class="string">&#x27;sum_sq&#x27;</span>].Residual), <span class="number">1</span>)</span><br><span class="line"><span class="comment"># 计算总的离均差平方和</span></span><br><span class="line">ss_total = ss_between + ss_within</span><br></pre></td></tr></table></figure>
+
+<p>计算完 $SS$ 之后， $\eta^2$ 本身很简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eta_squared = ss_between / ss_total</span><br><span class="line">print(round(eta_squared, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>0.492</code></p>
+<p>我们还需要进行一下事后检验，以确定究竟哪些处理水平之间有显著差异：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import pingouin as pg</span><br><span class="line">hsd_result &#x3D; pg.pairwise_tukey(data&#x3D;data, dv&#x3D;&#39;Grade&#39;, between&#x3D;&#39;Strategy&#39;)</span><br><span class="line">print(hsd_result)</span><br></pre></td></tr></table></figure>
+
+<pre><code>   A  B  mean(A)  mean(B)  diff       se         T   p-tukey    hedges
+0  a  b        5        6    -1  1.01653 -0.983739  0.731203 -0.524272
+1  a  c        5        8    -3  1.01653 -2.951216  0.021398 -1.572817
+2  a  d        5        9    -4  1.01653 -3.934955  0.001000 -2.097090
+3  b  c        6        8    -2  1.01653 -1.967478  0.209571 -1.048545
+4  b  d        6        9    -3  1.01653 -2.951216  0.021398 -1.572817
+5  c  d        8        9    -1  1.01653 -0.983739  0.731203 -0.524272</code></pre>
+<p>官方文档索引：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.statsmodels.org/stable/generated/statsmodels.stats.anova.anova_lm.html">statsmodels.stats.anova.anova_lm — statsmodels</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.statsmodels.org/stable/generated/statsmodels.formula.api.ols.html">statsmodels.formula.api.ols — statsmodels</a></li>
+<li><a target="_blank" rel="noopener" href="https://pingouin-stats.org/generated/pingouin.pairwise_tukey.html">pingouin.pairwise_tukey</a></li>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/user/quickstart.html">Quickstart tutorial — NumPy Manual</a></li>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/user/basics.indexing.html">Indexing — NumPy Manual</a></li>
+<li><a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/user_guide/indexing.html">Indexing and selecting data — pandas documentation</a></li>
+</ul>
+<p><strong>在文献中报告结果</strong></p>
+<p>表 1 呈现的是四种学习策略下学生的测验成绩的平均数与标准差。方差分析表明四种学习策略之间存在显著差异，$F$(3, 20) = 6.45，$p$ = 0.003，$\eta^2$ = 0.492。事后检验（HSD法）表明，回答事先准备好的问题的测验成绩大于仅阅读一次的测验成绩（$p$ = 0.021），提出问题并解答自己的问题的测验成绩大于仅阅读一次的测验成绩（$p$ = 0.001），提出问题并解答自己的问题的测验成绩大于重复阅读的测验成绩（$p$ = 0.021）。</p>
+<p>（注意：这里的排版格式并不符合论文规范，尤其是表格不是三线表。）</p>
+<p>**表 1 四种不同学习策略下的测验成绩</p>
+<table>
+<thead>
+<tr>
+<th align="center">\</th>
+<th align="center">仅阅读一次</th>
+<th align="center">重复阅读</th>
+<th align="center">回答事先准备好的问题</th>
+<th align="center">学生提出问题并解答自己的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">M</td>
+<td align="center">5.00</td>
+<td align="center">6.00</td>
+<td align="center">8.00</td>
+<td align="center">9.00</td>
+</tr>
+<tr>
+<td align="center">SD</td>
+<td align="center">2.00</td>
+<td align="center">2.00</td>
+<td align="center">1.67</td>
+<td align="center">1.26</td>
+</tr>
+</tbody></table>
+<h3 id="例题2-单因素重复测量方差分析"><a href="#例题2-单因素重复测量方差分析" class="headerlink" title="例题2 单因素重复测量方差分析"></a>例题2 单因素重复测量方差分析</h3><p>此题的数据与上一题的相同，只是假设的研究情境有所改变：每个被试用一种学习策略学习一篇短文后完成总分为 10 分的测验，短暂休息后再用一个新的学习策略和一篇新的文章来学习并测试，然后重复此过程至学完所有短文。</p>
+<table>
+<thead>
+<tr>
+<th align="center">被试</th>
+<th align="center">仅阅读一次</th>
+<th align="center">重复阅读</th>
+<th align="center">回答事先准备好的问题</th>
+<th align="center">学生提出问题并解答自己的问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">A</td>
+<td align="center">3</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">B</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">C</td>
+<td align="center">4</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">D</td>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">9</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td align="center">6</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">F</td>
+<td align="center">8</td>
+<td align="center">8</td>
+<td align="center">10</td>
+<td align="center">10</td>
+</tr>
+</tbody></table>
+<p>问题：不同学习策略下的测试成绩是否不同？</p>
+<p><strong>提出假设</strong></p>
+<p>$H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4$ （不同学习策略下的测试成绩相同。）<br><br>$H_1:$ 至少有一个学习策略与其它学习策略的测试成绩不同。</p>
+<p><strong>进行检验</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> pingouin <span class="keyword">as</span> pg</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备数据 (以下是一种&quot;wide-format dataset&quot;)</span></span><br><span class="line">data = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&#x27;condition1&#x27;</span>: [<span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">8</span>],</span><br><span class="line">    <span class="string">&#x27;condition2&#x27;</span>: [<span class="number">5</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">8</span>],</span><br><span class="line">    <span class="string">&#x27;condition3&#x27;</span>: [<span class="number">8</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">10</span>],</span><br><span class="line">    <span class="string">&#x27;condition4&#x27;</span>: [<span class="number">8</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方差齐性检验（默认：莱文检验，alpha=0.05）</span></span><br><span class="line">result_ev = pg.homoscedasticity(data)</span><br><span class="line"><span class="comment"># 你可以看一看结果长啥样（这是一个 pandas.DataFrame）</span></span><br><span class="line">print(result_ev)</span><br><span class="line"><span class="comment"># 令方差齐性检验结果为 True ，否则报错</span></span><br><span class="line"><span class="comment"># 比如对于检验结果的这个布尔值，我们先索引出 equal_var 这一列（一个 pandas.Series）</span></span><br><span class="line"><span class="comment"># 再索引出这一列的 Label 为 levene 的数据（即便这个表格只有一行，也得这样操作）</span></span><br><span class="line"><span class="comment"># p 值的调用思路是一样的</span></span><br><span class="line"><span class="keyword">assert</span> result_ev.equal_var.levene, <span class="string">f&quot;数据不符合方差齐性 (p = <span class="subst">&#123;result_ev.pval.levene:<span class="number">.3</span>f&#125;</span>)&quot;</span></span><br><span class="line">print(<span class="string">f&#x27;数据符合方差齐性 (p = <span class="subst">&#123;p:<span class="number">.3</span>f&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单因素重复测量方差分析，使用 wide-format dataset</span></span><br><span class="line">result = pg.rm_anova(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将结果保留三位小数打印出来</span></span><br><span class="line">print(round(result, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>   Source  ddof1  ddof2       F  p-unc    np2    eps
+0  Within      3     15  21.429    0.0  0.811  0.726</code></pre>
+<p>官方文档索引：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://pingouin-stats.org/generated/pingouin.rm_anova.html">pingouin.rm_anova</a></li>
+<li><a target="_blank" rel="noopener" href="https://pingouin-stats.org/generated/pingouin.homoscedasticity.html">pingouin.homoscedasticity</a></li>
+</ul>
+<p><strong>报告结果</strong></p>
+<p>表 1 呈现的是四种学习策略下学生的测验成绩的平均数与标准差，重复测量方差分析表明四种学习策略的成绩存在显著差异，$F$(3, 15) = 21.429，$p$ &lt; 0.001，$\eta_p^2$ = 0.811。</p>
+<p>（表 1 与例题一的相同，此处略去。）</p>
+<p>此外，这里同样需要进行事后检验，其实现方式与例题1的相同。而且由于本题用于练习的数据也与例题1完全相同，因此事后检验的结果也完全相同，此处不再赘述。</p>
+<h3 id="例题3-双因素独立测量方差分析"><a href="#例题3-双因素独立测量方差分析" class="headerlink" title="例题3 双因素独立测量方差分析"></a>例题3 双因素独立测量方差分析</h3><p>Ackerman 和 Goldsmith（2011）的研究比较了学生通过印刷出的纸张或电脑屏幕学习短文的表现。研究结果表明，如果学生的学习时间可以自行控制的话，他们在印刷的纸张上学习的表现会好很多。然而，当研究者固定了学习时间后，在两种学习情境下的表现没有差异。很明显，与用纸张学习相比，学生在电脑上学习会较难预测其学习表现，或很难控制自己的时间。下表中的数据重复了Ackerman 和 Goldsmith 的实验。两个因素为呈现模式（纸张或电脑屏幕）和时间控制（自行调整或固定）。该研究共涉及 4 个处理情境，每一种处理情境中有5个被试。因变量为学生在有关学过的短文（总分为10分）的测验上的表现。</p>
+<p><img src="https://i.loli.net/2020/10/19/M57LarsGqT1XYwe.png" alt="py-anova-intro-001.png"></p>
+<p>问题：学习过程中的材料呈现模式和时间控制是否对测验成绩有影响？</p>
+<p>先准备一下数据：在 Excel 里按这样整理（下表可直接复制进 Excel ；假设文件名为“data.xlsx”）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">TimeControl</th>
+<th align="center">Presentation</th>
+<th align="center">Score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Free</td>
+<td align="center">Paper</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Paper</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Paper</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Paper</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Paper</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Paper</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Paper</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Paper</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Paper</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Paper</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Screen</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Screen</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Screen</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Screen</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">Free</td>
+<td align="center">Screen</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Screen</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Screen</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Screen</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Screen</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">Fixed</td>
+<td align="center">Screen</td>
+<td align="center">9</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> pingouin <span class="keyword">as</span> pg</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件里读取数据生成一个 pandas.DataFrame</span></span><br><span class="line">data = pd.read_excel(<span class="string">&#x27;data.xlsx&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备进行方差齐性检验</span></span><br><span class="line"><span class="comment"># 样本被分为 2 × 2 = 4 种处理条件，故对这 4 种处理对应的 4 组数据进行方差齐性检验</span></span><br><span class="line"><span class="comment"># 这里的实现方式还很不优雅</span></span><br><span class="line"><span class="comment"># 拎出 TimeControl 为 Free 且 Presentation 为 Screen 的被试分数</span></span><br><span class="line">a = data[data[<span class="string">&#x27;TimeControl&#x27;</span>]==<span class="string">&#x27;Free&#x27;</span>][data[<span class="string">&#x27;Presentation&#x27;</span>]==<span class="string">&#x27;Paper&#x27;</span>].Score</span><br><span class="line"><span class="comment"># 这三行的思路一样，不赘述</span></span><br><span class="line">b = data[data[<span class="string">&#x27;TimeControl&#x27;</span>]==<span class="string">&#x27;Free&#x27;</span>][data[<span class="string">&#x27;Presentation&#x27;</span>]==<span class="string">&#x27;Screen&#x27;</span>].Score</span><br><span class="line">c = data[data[<span class="string">&#x27;TimeControl&#x27;</span>]==<span class="string">&#x27;Fixed&#x27;</span>][data[<span class="string">&#x27;Presentation&#x27;</span>]==<span class="string">&#x27;Paper&#x27;</span>].Score</span><br><span class="line">d = data[data[<span class="string">&#x27;TimeControl&#x27;</span>]==<span class="string">&#x27;Fixed&#x27;</span>][data[<span class="string">&#x27;Presentation&#x27;</span>]==<span class="string">&#x27;Screen&#x27;</span>].Score</span><br><span class="line"><span class="comment"># 莱文方差齐性检验</span></span><br><span class="line">_, p = stats.levene(a, b, c, d)</span><br><span class="line"><span class="comment"># 令方差齐性检验的 p &gt; 0.05 ，否则报错</span></span><br><span class="line"><span class="keyword">assert</span> p &gt; <span class="number">0.05</span>, <span class="string">f&quot;数据不符合方差齐性 (p = <span class="subst">&#123;p:<span class="number">.3</span>f&#125;</span>)&quot;</span></span><br><span class="line">print(<span class="string">f&#x27;数据符合方差齐性 (p = <span class="subst">&#123;p:<span class="number">.3</span>f&#125;</span>)&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 双因素方差分析，使用 long-format dataset</span></span><br><span class="line"><span class="comment"># 参数 dv 代表因变量，between 代表组间因素</span></span><br><span class="line">result = pg.anova(data, dv=<span class="string">&quot;Score&quot;</span>, between=[<span class="string">&quot;TimeControl&quot;</span>, <span class="string">&quot;Presentation&quot;</span>])</span><br><span class="line"></span><br><span class="line">print(result.round(<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>                       Source     SS  DF     MS       F  p-unc    np2
+0                 TimeControl  11.25   1  11.25   3.750  0.071  0.190
+1                Presentation  11.25   1  11.25   3.750  0.071  0.190
+2  TimeControl * Presentation  31.25   1  31.25  10.417  0.005  0.394
+3                    Residual  48.00  16   3.00     NaN    NaN    NaN</code></pre>
+<p>只有交互作用显著，而且这里每个因素都只有两个水平，那就不需要管事后检验了。</p>
+<p>报告结果：</p>
+<ul>
+<li>各处理情境下的平均数和标准差在图 1 中报告出来。双因素方差分析显示时间控制不存在显著的主效应：$F$(1, 16) = 3.75，$p$ &gt; 0.05, $\eta^2$ = 0.190；呈现方式也不存在显著的主效应：$F$(1, 16) = 3.75, $p$ &gt; 0.05, $\eta^2$ = 0.190。然而，这两个因素的交互作用显著：F(1, 16) = 10.41，$p$ &lt; 0.01，$\eta^2$ = 0.394。</li>
+</ul>
+<p>图 1 还没做出来，下面就用 Python 生成所需的图片吧~</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">sns.set()</span><br><span class="line"><span class="comment"># 这里可以先不搞明白所有参数的意义，只需要明白 data, x, y, hue 是做什么的就可以了</span></span><br><span class="line"><span class="comment"># 欲了解更多细节可参见官方文档，以及自行把玩一下这些参数</span></span><br><span class="line"><span class="comment"># 需要注意的是，x, y 和 hue 参数的字符串需要与 data 中使用的字符串是完全相同的</span></span><br><span class="line">sns.pointplot(data=data, x=<span class="string">&#x27;TimeControl&#x27;</span>, y=<span class="string">&#x27;Score&#x27;</span>, hue=<span class="string">&#x27;Presentation&#x27;</span>, ci=<span class="string">&#x27;sd&#x27;</span>, markers=[<span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;s&#x27;</span>], dodge=<span class="literal">True</span>, capsize=<span class="number">.1</span>, errwidth=<span class="number">1</span>, palette=<span class="string">&#x27;colorblind&#x27;</span>)</span><br><span class="line"><span class="comment"># 让当前的图片显示出来</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>**图1 被试在不同时间控制与材料呈现方式下学习之后的测验成绩</p>
+<p><img src="https://i.loli.net/2020/10/22/aqMehjCA7FRvcur.png" alt="Figure_1.png"></p>
+<p>官方文档索引：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://pingouin-stats.org/generated/pingouin.anova.html">pingouin.anova</a></li>
+<li><a target="_blank" rel="noopener" href="https://seaborn.pydata.org/generated/seaborn.pointplot.html">seaborn.pointplot</a></li>
+</ul>
+<p>（你可能会发现，例题1的方差分析其实用<code>pingouin.anova</code>就可以简简单单地完成了←_←不过多练练也无妨嘛，把基础打好~）</p>
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><p>本页面的统计知识及例题基本来自：</p>
+<ul>
+<li>弗雷德里克·J·格雷维特,  拉里·B·瓦尔诺. (2016). 行为科学统计精要. 中国人民大学出版社. (此书未来可能有新版引入)</li>
+</ul>
+<h2 id="ChangeLog"><a href="#ChangeLog" class="headerlink" title="ChangeLog"></a>ChangeLog</h2><ul>
+<li>201023 麦云飞 完成初稿</li>
+</ul>
+<hr>
 <p><a target="_blank" rel="noopener" href="https://maiyunfei2000.github.io/2020/08/20/py-cog-psy-catalogue/">点此返回系列总目录</a></p>
 
     </div>
@@ -256,12 +868,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/23/py-ttest-intro/" rel="prev" title="推断统计简介与 t 检验的 Python 实现">
+    <a href="/2020/09/23/py-t-test-intro/" rel="prev" title="推断统计简介与 t 检验的 Python 实现">
       <i class="fa fa-chevron-left"></i> 推断统计简介与 t 检验的 Python 实现
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/10/14/py-correlation-and-regression-intro/" rel="next" title="Python 相关与回归入门">
-      Python 相关与回归入门 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/10/14/py-correlation-and-regression-intro/" rel="next" title="Python 相关与回归简介">
+      Python 相关与回归简介 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -321,7 +933,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.</span> <span class="nav-text">知识回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">Python 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B1-%E5%8D%95%E5%9B%A0%E7%B4%A0%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">例1 单因素方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B2-%E9%87%8D%E5%A4%8D%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.2.</span> <span class="nav-text">例2 重复测量方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B3-%E5%8F%8C%E5%9B%A0%E7%B4%A0%E7%8B%AC%E7%AB%8B%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text">例3 双因素独立测量方差分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">3.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.</span> <span class="nav-text">知识回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.2.</span> <span class="nav-text">独立测量方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text">重复测量方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%9B%A0%E7%B4%A0%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">2.4.</span> <span class="nav-text">双因素方差分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">Python 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%981-%E5%8D%95%E5%9B%A0%E7%B4%A0%E7%8B%AC%E7%AB%8B%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">3.1.</span> <span class="nav-text">例题1 单因素独立测量方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%982-%E5%8D%95%E5%9B%A0%E7%B4%A0%E9%87%8D%E5%A4%8D%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">3.2.</span> <span class="nav-text">例题2 单因素重复测量方差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%983-%E5%8F%8C%E5%9B%A0%E7%B4%A0%E7%8B%AC%E7%AB%8B%E6%B5%8B%E9%87%8F%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">3.3.</span> <span class="nav-text">例题3 双因素独立测量方差分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">延伸阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChangeLog"><span class="nav-number">5.</span> <span class="nav-text">ChangeLog</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -344,13 +956,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
