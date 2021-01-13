@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Python 行为实验：Stroop 范式">
+<meta property="og:url" content="http://yoursite.com/2020/12/27/py-stroop/index.html">
+<meta property="og:site_name" content="青鱼的天空">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/01/07/ZkHl47bI8xjsyBD.png">
+<meta property="og:image" content="https://i.loli.net/2021/01/12/BkJGXdnVFZSNicE.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/12/x2bLiyZsjKwdkFG.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/01/11/FlZEmuSqo3cUsPT.png">
+<meta property="article:published_time" content="2020-12-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-13T01:31:48.318Z">
+<meta property="article:author" content="麦云飞">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="认知科学">
+<meta property="article:tag" content="心理科学">
+<meta property="article:tag" content="行为实验">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/01/07/ZkHl47bI8xjsyBD.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/12/27/py-stroop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Python 行为实验：Stroop 范式 | 青鱼的天空</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">青鱼的天空</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/27/py-stroop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/myf-logo.jpg">
+      <meta itemprop="name" content="麦云飞">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青鱼的天空">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 行为实验：Stroop 范式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-27 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-27T00:00:00+08:00">2020-12-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-13 09:31:48" itemprop="dateModified" datetime="2021-01-13T09:31:48+08:00">2021-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mannual/" itemprop="url" rel="index"><span itemprop="name">Mannual</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description"></div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>注：</p>
+<ol>
+<li>此系列文字面向已有实验心理学与心理统计学基础的人，侧重 Python 实现而非知识讲解。小白请着重配合相关课程和教材食用。</li>
+<li>Python 版本默认为 3.6 ，建议使用不小于这种版本的 Python 来实践，否则程序可能会报错。</li>
+<li>此页面的程序会用到 Python 第三方库 <a target="_blank" rel="noopener" href="https://www.psychopy.org/">PsychoPy</a> 和 <a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/">Pandas</a> 。如果你还没有安装，请在命令行里通过 <code>pip3 install psychopy</code>（或 <code>pandas</code> ）这些命令来安装（ Windows 用户在“pip”后无需跟上“3”；若你不确定有无安装这些库，可使用<code>pip3 list</code>查看已安装的第三方库）。</li>
+<li>这里有一些计算机用语不算严谨，不过入门者尚无需关心这些问题。</li>
+<li>本文假设你对 Python 编程的自学与实践并不熟练，因此讲解起来很啰嗦。自学能力强的人或许可以直接跳到结尾“完整代码”部分。</li>
+</ol>
+</blockquote>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li>Stroop 范式简介</li>
+<li>问题引入与实验设计</li>
+<li>实验编程<ul>
+<li>一些准备工作</li>
+<li>程序的骨架</li>
+<li>指导语</li>
+<li>单次任务</li>
+<li>试次安排</li>
+<li>程序尽头</li>
+<li>完整代码</li>
+<li>思考题</li>
+</ul>
+</li>
+<li>数据分析</li>
+<li>延伸阅读</li>
+</ul>
+<h2 id="Stroop-范式简介"><a href="#Stroop-范式简介" class="headerlink" title="Stroop 范式简介"></a>Stroop 范式简介</h2><p>（略 自行回顾各种心理学文献←_←）</p>
+<h2 id="问题引入与实验设计"><a href="#问题引入与实验设计" class="headerlink" title="问题引入与实验设计"></a>问题引入与实验设计</h2><p>假设我们想知道中国人的汉语加工与英语加工是否会有 Stroop 效应，以及不同语言下这种效应大小是否有区别。</p>
+<p>我们可以设计一个简单的 Stroop 实验，考察不同语言条件下我们是否会出现显著的 Stroop 效应（即单词语义与字符颜色相同时的反应表现比单词语义与字符颜色不同时的反应表现更好）。显然，自变量是「（语义与颜色）是否一致」和「语言」，因变量是「反应时」和「准确率」。</p>
+<h2 id="实验编程"><a href="#实验编程" class="headerlink" title="实验编程"></a>实验编程</h2><h3 id="一些准备工作"><a href="#一些准备工作" class="headerlink" title="一些准备工作"></a>一些准备工作</h3><p>导入我们需要用到的库和模块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> textwrap <span class="keyword">import</span> dedent</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">from</span> psychopy <span class="keyword">import</span> core, clock, data, gui, visual</span><br><span class="line"><span class="keyword">from</span> psychopy.hardware <span class="keyword">import</span> keyboard</span><br></pre></td></tr></table></figure>
+
+<p>实验正式开始前，我们首先需要设置和收集一些基本信息。首先设置一个 GUI 窗口来收集被试信息。</p>
+<p><img src="https://i.loli.net/2021/01/07/ZkHl47bI8xjsyBD.png" alt="GUI.png"></p>
+<p>比如说，我们需要呈现上图那样的窗口（文本框中的字符是默认呈现的）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这个字典将用于生成收集被试信息的对话框</span></span><br><span class="line"><span class="comment"># 结合上图可知：字典的键为项目名，字典的值为文本输入框里默认呈现的字符</span></span><br><span class="line">expInfo = &#123;<span class="string">&#x27;被试编号&#x27;</span>: <span class="string">&#x27;000&#x27;</span>, <span class="string">&#x27;性别&#x27;</span>: <span class="string">&#x27;女&#x27;</span>, <span class="string">&#x27;年龄&#x27;</span>: <span class="string">&#x27;00&#x27;</span>, <span class="string">&#x27;组别&#x27;</span>: <span class="string">&#x27;A&#x27;</span>&#125;</span><br><span class="line"><span class="comment"># 弹出</span></span><br><span class="line">dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=<span class="literal">False</span>, title=expName)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再给 expInfo 补充一些信息，比如实验时间、实验名称和 PsychoPy 版本</span></span><br><span class="line">psychopyVer = <span class="string">&#x27;2020.2.10&#x27;</span> <span class="comment"># PsychoPy 版本</span></span><br><span class="line">expName = <span class="string">&#x27;BilingualStroop&#x27;</span> <span class="comment"># 实验名称</span></span><br><span class="line">dateStrOri = str(datetime.now()) <span class="comment"># 实验日期</span></span><br><span class="line">dateStr = <span class="string">&#x27;&#x27;</span>.join(dateStrOri[:<span class="number">-10</span>].split(<span class="string">&#x27;-&#x27;</span>)) <span class="comment"># 一点文本处理</span></span><br><span class="line">dateStr = <span class="string">&#x27;_&#x27;</span>.join(dateStr.split(<span class="string">&#x27; &#x27;</span>)) <span class="comment"># 不熟悉的同学可在交互式命令行里玩一下</span></span><br><span class="line">dateStr = <span class="string">&#x27;&#x27;</span>.join(dateStr.split(<span class="string">&#x27;:&#x27;</span>)) <span class="comment"># 这个变量之后会用到</span></span><br><span class="line">expInfo[<span class="string">&#x27;日期&#x27;</span>] = dateStrOri</span><br><span class="line">expInfo[<span class="string">&#x27;实验名称&#x27;</span>] = expName</span><br><span class="line">expInfo[<span class="string">&#x27;PsychoPy版本&#x27;</span>] = psychopyVer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用户点击 `Cancel` 按钮则中止实验，否则继续进程</span></span><br><span class="line"><span class="keyword">if</span> dlg.OK == <span class="literal">False</span>:</span><br><span class="line">    print(<span class="string">&quot;实验被取消。&quot;</span>)</span><br><span class="line">    core.quit() <span class="comment"># 结束 PsychoPy 和 Python 进程</span></span><br></pre></td></tr></table></figure>
+
+<p>被试输入自己的信息之后，字典 <code>expInfo</code> 的数据就更新为 ta 输入的内容。比如一位被试将“性别”修改为“男”并点击 <code>OK</code> 之后，<code>expInfo[&#39;性别&#39;]</code> 就被赋值为 <code>&#39;男&#39;</code> 。</p>
+<ul>
+<li>官方文档索引：<a target="_blank" rel="noopener" href="https://www.psychopy.org/api/gui.html#psychopy.gui.DlgFromDict">psychopy.gui.DlgFromDict</a></li>
+</ul>
+<p>接下来应当启动 PsychoPy 的实验程序界面并准备好键盘（初始化 PsychoPy 对显示屏和键盘的控制）。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">win = visual.Window(size=[<span class="number">800</span>, <span class="number">600</span>],</span><br><span class="line">                        fullscr=<span class="literal">False</span>,</span><br><span class="line">                        screen=<span class="number">0</span>, </span><br><span class="line">                        winType=<span class="string">&#x27;pyglet&#x27;</span>, </span><br><span class="line">                        monitor=<span class="string">&#x27;testMonitor&#x27;</span>, </span><br><span class="line">                        color=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>], </span><br><span class="line">                        units=<span class="string">&#x27;pix&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用来留一个后门：按下 Esc 键即中止程序</span></span><br><span class="line">defaultKb = keyboard.Keyboard()</span><br><span class="line"><span class="comment"># 用来接收用户的按键反应</span></span><br><span class="line">resp = keyboard.Keyboard()</span><br></pre></td></tr></table></figure>
+
+<p>这里我们创建了一个 <code>visual.Window</code> 对象，赋给了变量名 <code>win</code> 。以下稍微解读一下这里使用的参数（你阅读完可能还有未被解答的疑惑，但它们此时通常并不重要）：</p>
+<ul>
+<li>size: 窗口大小。这里设置为 800*600 ，以尽可能兼容各种尺寸的显示器。</li>
+<li>fullscr: 是否全屏。在编写和调试程序时可以设为 <code>False</code>，方便同步监控着命令行和立即 debug ；在程序调试完成准备正式拿去做实验之前再改为 <code>True</code> 。</li>
+<li>screen: 屏幕编号。如果你只有一个显示屏的话设成 <code>0</code> 就好了。</li>
+<li>winType: 图形界面采用的后端引擎，用来渲染各种动画（底层通常是 OpenGL 等等）。有 <a target="_blank" rel="noopener" href="http://www.pyglet.org/">pyglet</a> 、<a target="_blank" rel="noopener" href="http://www.pygame.org/">pygame</a> 和 <a target="_blank" rel="noopener" href="https://www.glfw.org/">glfw</a> 这三种后端，它们都是 Python 第三方的游戏引擎库。一般设成 <code>pyglet</code> 就好。</li>
+<li>color: 背景颜色。这里是灰色。</li>
+<li>units: 图形的大小单位。这里采用像素。</li>
+</ul>
+<p>除以上参数还有很多参数，它们用默认值就行，并不需要设置。</p>
+<p>关于 <code>visual.Window</code> 和 <code>hardware.Keyboard</code> 这些类 (class) 的介绍，详见官方文档：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/visual/window.html#psychopy.visual.Window">psychopy.visual.Window</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/hardware/keyboard.html">psychopy.hardware.keyboard</a></li>
+</ul>
+<p>上面这段代码一旦运行——即 <code>visual.Window</code> 对象一旦建立（这里是创建了一个变量 <code>win</code> ），PsychoPy 实验窗口就会启动。接下来应正式开始实验程序。</p>
+<p>让我们一步步地一边梳理实验设计，一边展开代码结构。</p>
+<h3 id="程序的骨架"><a href="#程序的骨架" class="headerlink" title="程序的骨架"></a>程序的骨架</h3><p>我们可以这样设计整个实验流程：</p>
+<ul>
+<li>设定中文、英文两种 blocks ，并且： ①在每个 block 的开头呈现指导语，提示接下来是中文单词还是英文单词；②在每个 block 里面重复执行 <code>nRepetitions</code> 次所有可能条件，作为全部 trials 。</li>
+<li>试次全部结束之后再呈现感谢语，然后退出程序。</li>
+</ul>
+<p>这种流程控制如下图所示。显然，我们可以用两个 <code>for</code> 循环来实现 blocks 和 trials 的重复。</p>
+<p><img src="https://i.loli.net/2021/01/12/BkJGXdnVFZSNicE.jpg" alt="exp-procedure.jpeg"></p>
+<p>我们先把程序最基本的框架给编出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 调出前面收集的组别信息，用来安排 blocks 顺序</span></span><br><span class="line">group = expInfo[<span class="string">&#x27;组别&#x27;</span>]</span><br><span class="line"><span class="comment"># 对于 A 组，先呈现中文 block 再呈现英文 block ；B 组反之</span></span><br><span class="line">langList = [<span class="string">&#x27;CH&#x27;</span>, <span class="string">&#x27;EN&#x27;</span>] <span class="keyword">if</span> group==<span class="string">&#x27;A&#x27;</span> <span class="keyword">else</span> [<span class="string">&#x27;EN&#x27;</span>, <span class="string">&#x27;CH&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个个 block 地循环</span></span><br><span class="line"><span class="keyword">for</span> language <span class="keyword">in</span> langList: </span><br><span class="line"><span class="comment"># 你也可以把 language 命名为 thisBlock </span></span><br><span class="line"><span class="comment"># anyway，方便你直观理解即可</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 指导语</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 准备好试次条件</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 一个个 trial 地循环，共 nRepetitions * (所有可能条件的数目) 次</span></span><br><span class="line">    <span class="keyword">for</span> thisTrial <span class="keyword">in</span> trials:</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 每个 trial 的具体安排：</span></span><br><span class="line">        <span class="comment"># 注视点、文字刺激、空白、数据记录</span></span><br><span class="line">        <span class="keyword">pass</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 呈现结束语然后终止 PsychoPy</span></span><br><span class="line"><span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>然后再往里面填充一个个代码块。</p>
+<h3 id="指导语"><a href="#指导语" class="headerlink" title="指导语"></a>指导语</h3><p>指导语的文案如下：</p>
+<blockquote>
+<div align='center'>
+接下来会呈现系列单词，语言为【中文】。<br>你需要在单词出现后立即按键反应。<br><br>红色字体按“←”<br>绿色字体按“↓”<br>蓝色字体按“→”<br><br>请尽量又快又准地反应。<br><br>按空格键开始程序。
+</blockquote>
+</div>
+
+<p>建立一个字符串对象 <code>instructionStr</code> ，像这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">instructionStr = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">接下来会呈现系列单词，语言为【汉语】。</span></span><br><span class="line"><span class="string">你需要在单词出现后立即按键反应。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">红色字体按“←”</span></span><br><span class="line"><span class="string">绿色字体按“↓”</span></span><br><span class="line"><span class="string">蓝色字体按“→”</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">请尽量又快又准地反应。</span></span><br><span class="line"><span class="string">按空格键开始程序。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>你可能很快意识到，那这样还得建立一个英文 block 开始之前的指导语。于是总共会有 <code>instructionStrCH</code> 和 <code>instructionStrEN</code> 两个指导语变量。这会繁琐，这不优雅。</p>
+<p>如果你不是 Python 新手，很快能意识到解决办法是使用 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/stdtypes.html?highlight=format#str.format">format 方法</a> ：在“【】”里插入一个变量，它在 <code>language == &#39;EN&#39;</code> 时是 <code>&#39;英语&#39;</code>，不然是 <code>&#39;汉语&#39;</code> 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">langNameCH = <span class="string">&#x27;英语&#x27;</span> <span class="keyword">if</span> language == <span class="string">&#x27;EN&#x27;</span> <span class="keyword">else</span> <span class="string">&#x27;汉语&#x27;</span></span><br><span class="line"><span class="comment"># 上下两种表达的效果是一样的</span></span><br><span class="line"><span class="keyword">if</span> language == <span class="string">&#x27;EN&#x27;</span>:</span><br><span class="line">    langNameCH = <span class="string">&#x27;英语&#x27;</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    langNameCH = <span class="string">&#x27;汉语&#x27;</span></span><br><span class="line"></span><br><span class="line">instructionStr = dedent(<span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    接下来会呈现系列单词，语言为【<span class="subst">&#123;langNameCH&#125;</span>】。</span></span><br><span class="line"><span class="string">    你需要在单词出现后立即按键反应。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    红色字体按“←”</span></span><br><span class="line"><span class="string">    绿色字体按“↓”</span></span><br><span class="line"><span class="string">    蓝色字体按“→”</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    请尽量又快又准地反应。</span></span><br><span class="line"><span class="string">    按 [空格键] 开始程序。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>（这里的 <code>dedent()</code> 是什么鬼？你可以在成功运行完整代码之后删掉它，来看看发生了什么变化；或是查阅一下<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/textwrap.html?highlight=dedent#textwrap.dedent"> Python 官方文档关于 dedent 方法的介绍</a>。）</p>
+<p>接下来，我们需要将 <code>instructionStr </code> 这个字符串对象呈现为 PsychoPy 中的文字刺激。这个刺激需要保持呈现，直到用户按下空格键才消失并让程序往后推进。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建文件刺激，呈现在 PsychoPy 窗口 win 中</span></span><br><span class="line"><span class="comment"># 文字采用字符串 instructionStr</span></span><br><span class="line"><span class="comment"># 字体使用宋体</span></span><br><span class="line"><span class="comment"># 文字大小设为 25</span></span><br><span class="line">instructionText = visual.TextStim(win,</span><br><span class="line">                                  text=instructionStr, </span><br><span class="line">                                  font=<span class="string">&#x27;SimSun&#x27;</span>, </span><br><span class="line">                                  height=<span class="number">25</span>) </span><br></pre></td></tr></table></figure>
+
+<p>你创建了文字刺激之后，只是让 Python 的运行环境里面多了一个变量、多了一个对象。这个刺激对象不会自动显示在画面中。你还需要用 PsychoPy 的其它函数让它显示在画面中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把这个刺激“画”（呈现）出来</span></span><br><span class="line">instructionText.draw()</span><br><span class="line"><span class="comment"># 让 PsychoPy 窗口 win 的画面刷新一帧</span></span><br><span class="line"><span class="comment"># （如果你的屏幕刷新率是 60Hz ，那么一帧约 17 毫秒）</span></span><br><span class="line">win.flip()</span><br></pre></td></tr></table></figure>
+
+<p>不过当你下一次使用 <code>win.flip()</code> 而未使用 <code>instructionText.draw()</code> 时，这个刺激就又消失了。难不成得反复 draw、draw、draw 下去？开发者肯定会回避这么蠢的方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">instructionText.setAutoDraw(<span class="literal">True</span>)</span><br><span class="line">win.flip()</span><br></pre></td></tr></table></figure>
+
+<p>这样它就能在你使用 <code>setAutoDraw(False)</code> 之前一直呈现下去了。如果你需要不断变换刺激的某些属性（比如让颜色、形状、文字内容等等不断变化），这个函数会非常必要：只需要设定一次，刺激就会随着画面刷新自动变化起来，而无需反复使用 <code>win.draw()</code>。</p>
+<p>呈现了指导语之后，接下来我们需要用循环结构来始终保持在这个画面，直到用户按下空格键以继续。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清理 resp 存储的键盘事件</span></span><br><span class="line"><span class="comment"># （之后会再次遇到，到时再来稍微解释一下）</span></span><br><span class="line">resp.clearEvents(eventType=<span class="string">&#x27;keyboard&#x27;</span>)</span><br><span class="line"><span class="comment"># 一直循环下去</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment"># 记录 resp 接收到的按键，生成一个列表对象</span></span><br><span class="line">    <span class="comment"># （这里只允许接收空格键）</span></span><br><span class="line">    key = resp.getKeys(<span class="string">&#x27;space&#x27;</span>)</span><br><span class="line">    <span class="comment"># 如果列表 key 的长度不为 0 （ 0 等同于 False）</span></span><br><span class="line">    <span class="keyword">if</span> len(key):</span><br><span class="line">        <span class="comment"># 中断当前的 while 循环</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment"># 如果 defaultKb 接收到 esc 按键</span></span><br><span class="line">    <span class="keyword">if</span> defaultKb.getKeys([<span class="string">&quot;escape&quot;</span>]):</span><br><span class="line">        print(<span class="string">&quot;程序提前终止。&quot;</span>)</span><br><span class="line">        <span class="comment"># 结束 PsychoPy 和 Python 进程</span></span><br><span class="line">        core.quit()</span><br><span class="line">    <span class="comment"># 让画面刷新一帧</span></span><br><span class="line">    win.flip()</span><br><span class="line"><span class="comment"># 让 instructionText 消失</span></span><br><span class="line">instructionText.setAutoDraw(<span class="literal">False</span>)</span><br><span class="line">win.flip()</span><br></pre></td></tr></table></figure>
+
+<p>官方文档参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/event.html#psychopy.event.clearEvents">psychopy.event.clearEvents</a>：库 <code>psychopy</code> 的模块 <code>event</code> 的一种方法。</li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/visual/textstim.html#psychopy.visual.TextStim">psychopy.visual.TextStim</a>：库 <code>psychopy</code> 的模块 <code>visual</code> 中的文字刺激类型 <code>TextStim</code>。</li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/visual/textstim.html#psychopy.visual.TextStim.autoDraw">psychopy.visual.TextStim.autoDraw</a>：库 <code>psychopy</code> 的类 <code>visual.TextStim</code> 的一个属性。（注意，这不是 <code>TextStim.setAutoDraw</code> ！两者的关系是：<code>TextStim.setAutoDraw</code> 这种方法可以更改 <code>TextStim.autoDraw</code> 这个属性。你也可以使用 <code>TextStim.autoDraw = True # 或 False</code> 这种赋值语句来实现同样的目的。）</li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/hardware/keyboard.html#psychopy.hardware.keyboard.Keyboard.getKeys">psychopy.hardware.Keyboard.getKeys</a>：库 <code>psychopy</code> 的模块 <code>hardware</code> 的类 <code>Keyboard</code> 的一种函数/方法。</li>
+</ul>
+<p>除了用文字形式显示指导语，你还可以用幻灯软件排版好文字输出一张张图片文件（优点是排版和字体的设置能灵活许多，缺点是操作和文件管理会更麻烦一点），将其作为图片刺激呈现出来。参见官方文档：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/visual/imagestim.html#psychopy.visual.ImageStim">psychopy.visual.ImageStim</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/visual/simpleimagestim.html#psychopy.visual.SimpleImageStim">psychopy.visual.SimpleImageStim</a></li>
+</ul>
+<h3 id="单次任务"><a href="#单次任务" class="headerlink" title="单次任务"></a>单次任务</h3><p>单个 trial 中的任务流程：</p>
+<ol>
+<li>呈现 500 毫秒十字注视点。</li>
+<li>呈现一个文字刺激，直到被试按键反应才消失（这样就需要在数据处理时按照一定逻辑规则过滤掉反应时太长的数据；你也可以设定这个刺激呈现 2000 毫秒然后自动消失，然后记录反应为 <code>None</code> 或者某个字符串）。</li>
+<li>空白 500 毫秒。这一部分并不必要。个人觉得这能提示被试反应完成并给 ta 稍微缓一下，否则，反应完就立即弹出注视点接着是呈现下一个刺激，可能会让练习效应更明显（被试刚开始时更容易有点点没能及时反应）。</li>
+</ol>
+<p>这样一个流程如下图所示。</p>
+<p><img src="https://i.loli.net/2021/01/12/x2bLiyZsjKwdkFG.jpg" alt="trial-procedure.jpeg"></p>
+<h4 id="注视点"><a href="#注视点" class="headerlink" title="注视点"></a>注视点</h4><p>首先准备好刺激：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在实验循环正式开始（开始两个 for 循环）之前定义这个函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">drawFixation</span>(<span class="params">size=<span class="number">1</span>, lineWidth=<span class="number">5</span></span>):</span> <span class="comment"># 默认大小1，宽度5</span></span><br><span class="line">    <span class="comment"># Line 的第 2、3 个参数为起止点的坐标</span></span><br><span class="line">    <span class="comment"># （如你所见，用列表和元组都可以）</span></span><br><span class="line">    horiLine = visual.Line(win, [<span class="number">-5</span>, <span class="number">0</span>], [<span class="number">5</span>, <span class="number">0</span>],</span><br><span class="line">                           lineWidth=lineWidth, size=size,</span><br><span class="line">                           autoDraw=<span class="literal">False</span>)</span><br><span class="line">    vertLine = visual.Line(win, (<span class="number">0</span>,<span class="number">-5</span>), (<span class="number">0</span>,<span class="number">5</span>),</span><br><span class="line">                           lineWidth=lineWidth, size=size,</span><br><span class="line">                           autoDraw=<span class="literal">False</span>)</span><br><span class="line">    horiLine.draw()</span><br><span class="line">    vertLine.draw()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 你也可以试试换一种方式：用 TextStim 呈现一个“+”字</span></span><br></pre></td></tr></table></figure>
+
+<p>在代码“骨架”的里面的 for 循环中，我们只需这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">drawFixation(<span class="number">2</span>) <span class="comment"># 这里将 Line.size 设置为 2</span></span><br><span class="line">win.flip <span class="comment"># 刷新画面</span></span><br><span class="line">core.wait(<span class="number">0.5</span>) <span class="comment"># 等待 500 毫秒再继续向后执行</span></span><br></pre></td></tr></table></figure>
+
+<p>官方文档索引：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/visual/line.html#psychopy.visual.Line">psychopy.visual.Line</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/core.html#psychopy.core.wait">psychopy.core.wait</a></li>
+</ul>
+<h4 id="文字刺激"><a href="#文字刺激" class="headerlink" title="文字刺激"></a>文字刺激</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字体：中文为宋体，英文为 Times New Roman</span></span><br><span class="line">font = <span class="string">&#x27;SimSun&#x27;</span> <span class="keyword">if</span> language == <span class="string">&#x27;CH&#x27;</span> <span class="keyword">else</span> <span class="string">&#x27;Times New Roman&#x27;</span></span><br><span class="line"><span class="comment"># 创建文字刺激</span></span><br><span class="line">textStim = visual.TextStim(win,</span><br><span class="line">                                   text=word,</span><br><span class="line">                                   color=letterColor,</span><br><span class="line">                                   font=font,</span><br><span class="line">                                   height=<span class="number">100</span>)</span><br><span class="line"><span class="comment"># 这里 word 和 letterColor 的值会不断变化</span></span><br></pre></td></tr></table></figure>
+
+<p>你可能会发现我们还没有定义 word、letterColor 这些变量。让我们在 textStim 之前将它们定义出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> varName <span class="keyword">in</span> thisTrial:</span><br><span class="line">    exec(varName + <span class="string">&#x27;= thisTrial[varName]&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这是什么魔法？之后再在 <code>试次安排</code> 部分解释。你此时只需要知道这两行代码定义了 word 、letterColor 等变量（你可以仔细看看你之前创建的含有全部实验条件的 Excel 表格：里面设置的每个变量都会在这里成为 Python 变量，依次赋上相应的值）。</p>
+<p>定义完文字刺激之后，让它呈现出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">textStim.setAutoDraw(<span class="literal">True</span>)</span><br><span class="line">win.flip()</span><br></pre></td></tr></table></figure>
+
+<h4 id="按键反应与数据记录"><a href="#按键反应与数据记录" class="headerlink" title="按键反应与数据记录"></a>按键反应与数据记录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># 初始化键盘：清除之前缓存的按键事件</span><br><span class="line"># 如果没有这个，你若在上一此 trial 时连按几个键，</span><br><span class="line"># 下一次 trial 中残留的按键会直接反应，</span><br><span class="line"># 导致直接闪过此轮刺激，并记下 17 毫秒的反应时</span><br><span class="line"># （这是比较容易发生的）</span><br><span class="line">resp.clearEvents(eventType&#x3D;&#39;keyboard&#39;)</span><br><span class="line"># 创建 Clock 对象，从零开始计时</span><br><span class="line">timer &#x3D; clock.Clock()</span><br><span class="line"># 等待用户按键</span><br><span class="line">while True:</span><br><span class="line">    # 只能从“←”、“↓”、“→”三个键位接收按键事件</span><br><span class="line">    # 得到一个列表，赋给 keypress</span><br><span class="line">    keypress &#x3D; resp.getKeys([&#39;left&#39;, &#39;down&#39;, &#39;right&#39;])</span><br><span class="line">    win.flip() # 刷新屏幕</span><br><span class="line">    # 如果列表 keypress 不是空的</span><br><span class="line">    if len(keypress):</span><br><span class="line">        # 记录反应时</span><br><span class="line">        # 截取当前 timer 的时间，转换为毫秒，赋给变量 rt</span><br><span class="line">        rt &#x3D; round(timer.getTime() * 1000)</span><br><span class="line">        # 若接受到多个按键，只认定最先按下的按键</span><br><span class="line">        keyName &#x3D; keypress[0].name</span><br><span class="line">        # 记录是否正确</span><br><span class="line">        isCorrect &#x3D; (keyName &#x3D;&#x3D; corrAns)</span><br><span class="line">        # 让 textStim 在下一次 win.flip() 时消失</span><br><span class="line">        textStim.setAutoDraw(False)</span><br><span class="line">        # 退出循环</span><br><span class="line">        break</span><br><span class="line"></span><br><span class="line"># 记录数据</span><br><span class="line">trials.addData(&#39;反应时&#39;, rt)</span><br><span class="line">trials.addData(&#39;按键&#39;, keyName)</span><br><span class="line">trials.addData(&#39;是否正确&#39;, isCorrect)</span><br><span class="line"># 输出本轮数据（目标 Excel 文档中新增了一行记录）</span><br><span class="line">exp.nextEntry()</span><br><span class="line">#### 这些又是什么魔法？仍然是参见后面的&#96;试次安排&#96;部分</span><br></pre></td></tr></table></figure>
+
+<p>本轮 for 循环由此走到尽头。</p>
+<p>官方文档索引：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/event.html#psychopy.event.clearEvents">psychopy.event.clearEvents</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/clock.html#psychopy.clock.Clock">psychopy.clock.Clock</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/clock.html#psychopy.clock.MonotonicClock.getTime">psychopy.clock.Clock.getTime</a>（ <code>Clock</code> 类继承了 <code>MonotonicClock</code> 类，这个 <code>getTime</code> 方法由此继承而来。）</li>
+</ul>
+<h3 id="试次安排"><a href="#试次安排" class="headerlink" title="试次安排"></a>试次安排</h3><p>考虑完实验流程，我们还要安排好实验试次。</p>
+<p>首先先考虑好所有字符与颜色的组合情况以形成所有的条件，如下图所示。在汉语实验条件中，“word”这一列数据变为了相应的中文单词“红”、“黄”和“蓝”。</p>
+<p><img src="https://i.loli.net/2021/01/11/FlZEmuSqo3cUsPT.png" alt="EN_cond.png"></p>
+<p>你可以直接用 Office 软件创建一个这样的 Excel 文档（注意，要 .xlsx 而不能是 .xls ），也可以用 Python 的第三方库 Pandas 创建一个数据表，然后再输出为 Excel 文档。这些工作在 PsychoPy 启动之前就应完成，因此这部分代码要放在文件的前面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">condEN = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&#x27;word&#x27;</span>: [<span class="string">&#x27;red&#x27;</span>] * <span class="number">3</span> + [<span class="string">&#x27;green&#x27;</span>] * <span class="number">3</span> + [<span class="string">&#x27;blue&#x27;</span>] * <span class="number">3</span>,</span><br><span class="line">    <span class="string">&#x27;letterColor&#x27;</span>: [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;green&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>] * <span class="number">3</span>,</span><br><span class="line">    <span class="string">&#x27;corrAns&#x27;</span>: [<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;down&#x27;</span>, <span class="string">&#x27;right&#x27;</span>] * <span class="number">3</span>,</span><br><span class="line">    <span class="string">&#x27;congruent&#x27;</span>: [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">&#125;)</span><br><span class="line">condCH = pd.DataFrame(&#123;</span><br><span class="line">    <span class="string">&#x27;word&#x27;</span>: [<span class="string">&#x27;红&#x27;</span>] * <span class="number">3</span> + [<span class="string">&#x27;绿&#x27;</span>] * <span class="number">3</span> + [<span class="string">&#x27;蓝&#x27;</span>] * <span class="number">3</span>,</span><br><span class="line">    <span class="string">&#x27;letterColor&#x27;</span>: [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;green&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>] * <span class="number">3</span>,</span><br><span class="line">    <span class="string">&#x27;corrAns&#x27;</span>: [<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;down&#x27;</span>, <span class="string">&#x27;right&#x27;</span>] * <span class="number">3</span>,</span><br><span class="line">    <span class="string">&#x27;congruent&#x27;</span>: [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">&#125;)</span><br><span class="line">condEN.to_excel(<span class="string">&#x27;condEN.xlsx&#x27;</span>)</span><br><span class="line">condCH.to_excel(<span class="string">&#x27;condCH.xlsx&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>请注意，这里的变量名一定要用英文，因为它们在会成为 Python 变量。</p>
+<p>官方文档参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html">What kind of data does pandas handle? — pandas documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/02_read_write.html">How do I read and write tabular data? — pandas documentation</a></li>
+</ul>
+<p>然后再基于这些有限的条件生成一定倍数的试次，且试次要实现<strong>随机化</strong>。你可以用 Python 的标准库 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/random.html">random</a> 或是<a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/random/index.html"> numpy 库的 random 模块</a>来自行进行随机处理，也可以使用 PsychoPy 开发者们造好的轮子—— <code>TrialHandler</code>。这东西可以帮你轻松完成排序方式（顺序、随机和完全随机），还可以帮你即时存储被试的反应数据以随时输出。我这个懒鬼就先用起造好的轮子了。</p>
+<p>还记得前面出现过的变量 <code>trials</code> 、 <code>exp</code> 和 <code>thisTrial</code> 吗？这些接下来都会被讲解。（你可以用关键字检索来跳转到之前提到这些变量的位置。）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">exec(<span class="string">f&#x27;trialList<span class="subst">&#123;language&#125;</span> = data.importConditions(&quot;cond<span class="subst">&#123;language&#125;</span>.xlsx&quot;)&#x27;</span>)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">上面这行代码的作用相当于下面这两行代码的作用：</span></span><br><span class="line"><span class="string">trialListCH = data.importConditions(&#x27;condCH.xlsx&#x27;)</span></span><br><span class="line"><span class="string">trialListEN = data.importConditions(&#x27;condEN.xlsx&#x27;)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 创建 TrialHandler 对象</span></span><br><span class="line">trials = data.TrialHandler(eval(<span class="string">f&quot;trialList<span class="subst">&#123;language&#125;</span>&quot;</span>), </span><br><span class="line">                               nReps=nRepetitions, </span><br><span class="line">                               method=<span class="string">&#x27;random&#x27;</span>,</span><br><span class="line">                               extraInfo=expInfo,</span><br><span class="line">                               seed=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这些代码应当放在外层的 for 循环中。至于在指导语之前还是之后倒没有所谓，你觉得方便即可。（不过确实不一定要这样编写，还有别的方式，比如在实验开始之前就创建好 trialsCH 和 trialsEN 两个变量。）</p>
+<p>🚧解释上面的代码</p>
+<p>官方文档参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/functions.html#exec">Python 内置函数 exec</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/data.html#psychopy.data.importConditions">psychopy.data.importConditions</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/data.html#psychopy.data.TrialHandler">psychopy.data.TrialHandler</a></li>
+</ul>
+<h3 id="程序尽头"><a href="#程序尽头" class="headerlink" title="程序尽头"></a>程序尽头</h3><p>在完成整个循环过程之后：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提示开发者这个程序是正常走完全程之后才结束的</span></span><br><span class="line">print(<span class="string">&#x27;=&#x27;</span> * <span class="number">50</span>)</span><br><span class="line">print(<span class="string">&#x27;实验进程已结束。&#x27;</span>)</span><br><span class="line">print(<span class="string">&#x27;=&#x27;</span> * <span class="number">50</span>)</span><br><span class="line"><span class="comment"># 终止 PsychoPy 和 Python 进程</span></span><br><span class="line">core.quit()</span><br></pre></td></tr></table></figure>
+
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><p>别看上面唠叨了那么多，整个文件总共只有不到🚧行的代码。这算简洁了（虽然确实还可以更简洁）。</p>
+<p>🚧补齐完整代码后看看有多少行</p>
+<p>你一下子看不懂上面的很多内容也没有关系。你在实践中完全可以直接复制粘贴。你如果是非专业编程人士，若不对编程本身感兴趣，只需要理解某句代码为什么必要、能起到什么作用即可，而无需理解具体都发生了些什么事情。只需要先让代码跑起来即可，然后再一点点解决出现的状况。行动倒逼认知、实践倒逼认识。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><ul>
+<li>这里只有 2 个 blocks，每个 block 只有 9 个 trials。请你设置为 4 个 blocks，且每个 block 有 90 个 trials 。记得处理好平衡方式。</li>
+<li>聪明的你一定发现了这个按键实验没有设置练习环节，请你补充这一环节。显然，它与正式实验的区别就是能提供正误反馈，以及练习结束后可选择再练习一次或直接开始正式实验。</li>
+</ul>
+<p>继续动手实践一下吧~</p>
+<h2 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h2><p>由于作者变成鸽子飞去北冥找鲲一起 van 游戏了，所以这里仅有分析思路而没有完整代码：</p>
+<ul>
+<li>过滤不合理的反应数据，比如反应时大于 2000 毫秒的（标准设为 1000 也行）。</li>
+<li>计算每个被试的反应正确率，如果正确率低于某个标准则抛弃这份数据。</li>
+<li>合并被试数据为一个总表（用 Pandas 来操作，直接得到一个总的 <code>pd.DataFrame</code>），并新增一<strong>列</strong>数据表示这个刺激的语言（可以命名为 <code>&#39;language&#39;</code> ）。</li>
+<li>对这个 <code>pd.DataFrame</code> 以 <code>&#39;congruent&#39;</code> 和 <code>&#39;language&#39;</code> 为自变量，<code>&#39;rt&#39;</code> 为因变量，进行双因素方差分析（也可以拆成两个 $t$ 检验或两个单因素方差分析）。</li>
+</ul>
+<p>Python 编程实现方式参见之前的教程如<a target="_blank" rel="noopener" href="https://maiyunfei2000.github.io/2020/09/29/py-anova-intro/">《Python 方差分析》</a>等等，如果既有内容不足以解决，可进一步参考相关的官方文档。</p>
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/35140181/">《实验编程：PsychoPy 从入门到精通》</a>(Building Experiments in PsychoPy; 中文翻译真的标题党……)；<ul>
+<li>本教程的 Stroop 实验程序设计思路参考自此书。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.psychopy.org/api/api.html">PsychoPy Reference Manual (API)</a>：然而关于编程的信息全是从官方文档而非上面那本书里获得的。上面这本书基本只介绍怎么使用作为图形化界面软件的 PsychoPy 而非作为 Python 第三方库的 PsychoPy 。</li>
+<li>特别是本文档中链接到的所有官方文档页面。</li>
+</ul>
+<h2 id="ChangeLog"><a href="#ChangeLog" class="headerlink" title="ChangeLog"></a>ChangeLog</h2><ul>
+<li>210113 麦云飞 完成主要内容（实验设计与编程），留下数据分析小坑，咕咕而去。</li>
+<li>201227 麦云飞 建立文档。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"># 编程</a>
+              <a href="/tags/%E8%AE%A4%E7%9F%A5%E7%A7%91%E5%AD%A6/" rel="tag"># 认知科学</a>
+              <a href="/tags/%E5%BF%83%E7%90%86%E7%A7%91%E5%AD%A6/" rel="tag"># 心理科学</a>
+              <a href="/tags/%E8%A1%8C%E4%B8%BA%E5%AE%9E%E9%AA%8C/" rel="tag"># 行为实验</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/15/py-chi-squared-test/" rel="prev" title="Python χ² 检验">
+      <i class="fa fa-chevron-left"></i> Python χ² 检验
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stroop-%E8%8C%83%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">Stroop 范式简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">问题引入与实验设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BC%96%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">实验编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">4.1.</span> <span class="nav-text">一些准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%AA%A8%E6%9E%B6"><span class="nav-number">4.2.</span> <span class="nav-text">程序的骨架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AF%BC%E8%AF%AD"><span class="nav-number">4.3.</span> <span class="nav-text">指导语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E6%AC%A1%E4%BB%BB%E5%8A%A1"><span class="nav-number">4.4.</span> <span class="nav-text">单次任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E8%A7%86%E7%82%B9"><span class="nav-number">4.4.1.</span> <span class="nav-text">注视点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E5%AD%97%E5%88%BA%E6%BF%80"><span class="nav-number">4.4.2.</span> <span class="nav-text">文字刺激</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89%E9%94%AE%E5%8F%8D%E5%BA%94%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95"><span class="nav-number">4.4.3.</span> <span class="nav-text">按键反应与数据记录</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%95%E6%AC%A1%E5%AE%89%E6%8E%92"><span class="nav-number">4.5.</span> <span class="nav-text">试次安排</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E5%B0%BD%E5%A4%B4"><span class="nav-number">4.6.</span> <span class="nav-text">程序尽头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-number">4.7.</span> <span class="nav-text">完整代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">4.8.</span> <span class="nav-text">思考题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">数据分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">6.</span> <span class="nav-text">延伸阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChangeLog"><span class="nav-number">7.</span> <span class="nav-text">ChangeLog</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="麦云飞"
+      src="/images/myf-logo.jpg">
+  <p class="site-author-name" itemprop="name">麦云飞</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">麦云飞</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
